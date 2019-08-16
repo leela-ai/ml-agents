@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using System.Linq;
 using MLAgents;
@@ -9,6 +9,7 @@ public class GridAgent : Agent
     private GridAcademy academy;
     public float timeBetweenDecisionsAtInference;
     private float timeSinceDecision;
+    public float currentAction;
 
     [Tooltip("Because we want an observation right before making a decision, we can force " + 
              "a camera to render before making a decision. Place the agentCam here if using " +
@@ -34,6 +35,18 @@ public class GridAgent : Agent
     {
         // There are no numeric observations to collect as this environment uses visual
         // observations.
+      
+       AddVectorObs(gameObject.transform.position.x);
+       AddVectorObs(gameObject.transform.position.z);
+       // goal
+       AddVectorObs(academy.actorObjs[0].transform.position.x);
+       AddVectorObs(academy.actorObjs[0].transform.position.z);
+       // pit
+       AddVectorObs(academy.actorObjs[1].transform.position.x);
+       AddVectorObs(academy.actorObjs[1].transform.position.z);
+
+
+       AddVectorObs(currentAction);
 
         // Mask the necessary actions if selected by the user.
         if (maskActions)
@@ -77,7 +90,8 @@ public class GridAgent : Agent
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         AddReward(-0.01f);
-        int action = Mathf.FloorToInt(vectorAction[0]);
+        currentAction = vectorAction[0];
+        int action = Mathf.FloorToInt(currentAction);
 
         Vector3 targetPos = transform.position;
         switch (action)
