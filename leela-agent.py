@@ -18,16 +18,25 @@ import argparse
 parser = argparse.ArgumentParser(description='Leela Crossbar agent for Unity ML Agents worlds')
 
 parser.add_argument("-W", "--world", help="Choose a prebuilt Unity world to run from envs/ directory",)
+parser.add_argument("-d", "--debug", help="Enable debug printing", action="store_true")
 
 cmdline_args = parser.parse_args()
 
 # default to interactive launch of game script from Unity
 unity_world = None
 
+global debug
+debug = False
+
 # check for --width
 if cmdline_args.world:
     print(f'using envs. width to {cmdline_args.world}')
     unity_world = f'envs/{cmdline_args.world}'
+
+if cmdline_args.debug:
+    debug = True
+
+print(f'Debug flag = {debug}')
 
 import json
 from autobahn.asyncio.component import Component, run
@@ -66,30 +75,9 @@ GRIDSIZE = 0.5
 GRIDNUM = int(1 / GRIDSIZE)
 
 GRID_MINX = 1
-GRID_MAXX = 5
+GRID_MAXX = 9
 GRID_MINY = 1
-GRID_MAXY = 8
-
-MOVE_MAGNITUDE = 0.5
-HAND_MOVE_MAGNITUDE = 0.1
-
-SCREEN_WIDTH = 1920
-SCREEN_HEIGHT = 1080
-#SCREEN_WIDTH = 1280
-#SCREEN_HEIGHT = 1024
-
-
-
-AGENT_MINX = -1
-AGENT_MAXX = 0
-AGENT_MINY = -2.25
-AGENT_MAXY = 2.25
-AGENT_MINZ = -2.25
-AGENT_MAXZ = 2.25
-
-XOFFSET =  - AGENT_MINX
-YOFFSET =  - AGENT_MINY
-ZOFFSET =  - AGENT_MINZ
+GRID_MAXY = 9
 
 component = Component(
     transports=[
@@ -131,7 +119,8 @@ def step_world(actionsJS):
    else:
       action = dict(action=actions[0])
       action = action['action']
-      print("Action:", action)
+      if debug:
+          print("Action:", action)
       if(action == "NoAction"):
         integer_action = 0
       elif(action == "Right"):
@@ -197,23 +186,29 @@ def allItemNames():
             itemNames.append(locname)
     return itemNames
 
+XOFFSET = 0
+YOFFSET = 0
+ZOFFSET = 0
+
+
 # Adds agent position items to the ITEMS dict
 def map_agent_position_to_grid_sensor_items(items, observation_vector):
    clear_position_items(items)
-   print("Observation vector",observation_vector)
+   if debug:
+       print("Observation vector",observation_vector)
    agent_x = observation_vector[0]
    agent_z = observation_vector[1]
    grid_x = 1+int(ceil((agent_x+XOFFSET)/GRIDSIZE))
    grid_z = 1+int(ceil((agent_z+ZOFFSET)/GRIDSIZE))
    locname = f'hp{grid_x:d}{grid_z:d}'
-   print('locname',locname)
+   if debug:
+       print('locname',locname)
    items[locname] = True
-
 
 def clear_position_items(items):
     for x in range(GRID_MINX, GRID_MAXX):
         for y in range(GRID_MINY, GRID_MAXY):
-            locname = f'apos{x:d}{y:d}'
+            locname = f'hp{x:d}{y:d}'
             items[locname] = False
 def map_observation_vector_action_to_text(action):
     if (action == 0):
@@ -241,7 +236,8 @@ def construct_response_with_environment_state(observation_vector):
    #response['debuginfo'] =  processed_objects
    response['debuginfo'] =  []
    this_session.publish("ai.leela.sms.render.json", response)
-   print("Response",response)
+   if debug:
+       print("Response",response)
    return response
 
 
