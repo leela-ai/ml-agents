@@ -193,7 +193,7 @@ def allItemNames():
     # absolute body position names
     for x in range(GRID_MINX, GRID_MAXX):
         for y in range(GRID_MINY, GRID_MAXY):
-            locname = f'hpos{x:d}{y:d}'
+            locname = f'hp{x:d}{y:d}'
             itemNames.append(locname)
     return itemNames
 
@@ -205,7 +205,7 @@ def map_agent_position_to_grid_sensor_items(items, observation_vector):
    agent_z = observation_vector[1]
    grid_x = 1+int(ceil((agent_x+XOFFSET)/GRIDSIZE))
    grid_z = 1+int(ceil((agent_z+ZOFFSET)/GRIDSIZE))
-   locname = f'apos{grid_x:d}{grid_z:d}'
+   locname = f'hp{grid_x:d}{grid_z:d}'
    print('locname',locname)
    items[locname] = True
 
