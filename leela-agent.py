@@ -71,9 +71,6 @@ global clock
 
 RANDOMIZE_ITEMS_PERIOD = 100
 
-GRIDSIZE = 0.5
-GRIDNUM = int(1 / GRIDSIZE)
-
 GRID_MINX = 1
 GRID_MAXX = 9
 GRID_MINY = 1
@@ -186,11 +183,6 @@ def allItemNames():
             itemNames.append(locname)
     return itemNames
 
-XOFFSET = 0
-YOFFSET = 0
-ZOFFSET = 0
-
-
 # Adds agent position items to the ITEMS dict
 def map_agent_position_to_grid_sensor_items(items, observation_vector):
    clear_position_items(items)
@@ -198,8 +190,8 @@ def map_agent_position_to_grid_sensor_items(items, observation_vector):
        print("Observation vector",observation_vector)
    agent_x = observation_vector[0]
    agent_z = observation_vector[1]
-   grid_x = 1+int(ceil((agent_x+XOFFSET)/GRIDSIZE))
-   grid_z = 1+int(ceil((agent_z+ZOFFSET)/GRIDSIZE))
+   grid_x = 1+int(ceil(agent_x))
+   grid_z = 1+int(ceil(agent_z))
    locname = f'hp{grid_x:d}{grid_z:d}'
    if debug:
        print('locname',locname)
