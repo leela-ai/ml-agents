@@ -11,6 +11,23 @@
 #### Used by test client to do things in the sms
 # get_from_sms()
 # do_in_sms()
+# include standard modules
+import argparse
+
+# initiate the parser
+parser = argparse.ArgumentParser(description='Leela Crossbar agent for Unity ML Agents worlds')
+
+parser.add_argument("-W", "--world", help="Choose a prebuilt Unity world to run from envs/ directory",)
+
+cmdline_args = parser.parse_args()
+
+# default to interactive launch of game script from Unity
+unity_world = None
+
+# check for --width
+if cmdline_args.world:
+    print(f'using envs. width to {cmdline_args.world}')
+    unity_world = f'envs/{cmdline_args.world}'
 
 import json
 from autobahn.asyncio.component import Component, run
@@ -229,6 +246,7 @@ def construct_response_with_environment_state(observation_vector):
 
 
 if __name__ == "__main__":
-   environment = UnityEnvironment(file_name=None)
+   #environment = UnityEnvironment(file_name=None)
+   environment = UnityEnvironment(file_name=unity_world)
    environment.reset(train_mode=False)
    run([component])
