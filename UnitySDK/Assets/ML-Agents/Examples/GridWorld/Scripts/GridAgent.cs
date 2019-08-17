@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using System.Linq;
 using MLAgents;
@@ -11,7 +11,7 @@ public class GridAgent : Agent
     private float timeSinceDecision;
     public float currentAction;
 
-    [Tooltip("Because we want an observation right before making a decision, we can force " + 
+    [Tooltip("Because we want an observation right before making a decision, we can force " +
              "a camera to render before making a decision. Place the agentCam here if using " +
              "RenderTexture as observations.")]
     public Camera renderCamera;
@@ -35,18 +35,18 @@ public class GridAgent : Agent
     {
         // There are no numeric observations to collect as this environment uses visual
         // observations.
-      
-       AddVectorObs(gameObject.transform.position.x);
-       AddVectorObs(gameObject.transform.position.z);
-       // goal
-       AddVectorObs(academy.actorObjs[0].transform.position.x);
-       AddVectorObs(academy.actorObjs[0].transform.position.z);
-       // pit
-       AddVectorObs(academy.actorObjs[1].transform.position.x);
-       AddVectorObs(academy.actorObjs[1].transform.position.z);
+
+        AddVectorObs(gameObject.transform.position.x);
+        AddVectorObs(gameObject.transform.position.z);
+        // goal
+        AddVectorObs(academy.actorObjs[0].transform.position.x);
+        AddVectorObs(academy.actorObjs[0].transform.position.z);
+        // pit
+        AddVectorObs(academy.actorObjs[1].transform.position.x);
+        AddVectorObs(academy.actorObjs[1].transform.position.z);
 
 
-       AddVectorObs(currentAction);
+        AddVectorObs(currentAction);
 
         // Mask the necessary actions if selected by the user.
         if (maskActions)
@@ -61,8 +61,8 @@ public class GridAgent : Agent
     private void SetMask()
     {
         // Prevents the agent from picking an action that would make it collide with a wall
-        var positionX = (int) transform.position.x;
-        var positionZ = (int) transform.position.z;
+        var positionX = (int)transform.position.x;
+        var positionZ = (int)transform.position.z;
         var maxPosition = academy.gridSize - 1;
 
         if (positionX == 0)
@@ -146,7 +146,7 @@ public class GridAgent : Agent
 
     private void WaitTimeInference()
     {
-        if(renderCamera != null)
+        if (renderCamera != null)
         {
             renderCamera.Render();
         }

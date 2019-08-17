@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using MLAgents;
@@ -35,7 +35,7 @@ public class GridAcademy : Academy
         gridSize = (int)resetParameters["gridSize"];
         cam = camObject.GetComponent<Camera>();
 
-        objects = new GameObject[3] {agentPref, goalPref, pitPref};
+        objects = new GameObject[3] { agentPref, goalPref, pitPref };
 
         agentCam = GameObject.Find("agentCam").GetComponent<Camera>();
 
@@ -50,8 +50,8 @@ public class GridAcademy : Academy
 
     public void SetEnvironment()
     {
-        cam.transform.position = new Vector3(-((int)resetParameters["gridSize"] - 1) / 2f, 
-                                             (int)resetParameters["gridSize"] * 1.25f, 
+        cam.transform.position = new Vector3(-((int)resetParameters["gridSize"] - 1) / 2f,
+                                             (int)resetParameters["gridSize"] * 1.25f,
                                              -((int)resetParameters["gridSize"] - 1) / 2f);
         cam.orthographicSize = ((int)resetParameters["gridSize"] + 5f) / 2f;
 
