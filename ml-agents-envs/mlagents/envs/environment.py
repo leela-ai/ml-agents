@@ -32,7 +32,7 @@ from .communicator_objects import (
 from .rpc_communicator import RpcCommunicator
 from sys import platform
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("mlagents.envs")
 
 

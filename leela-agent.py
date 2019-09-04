@@ -66,15 +66,29 @@ global environment
 global this_session
 global controller
 global clock
-# inverse of THOR's idea of grid, this means 4 grids per unit of space, i.e., a Thor gridsize=0.25
 
+PROP_GRID_MINX = 1
+PROP_GRID_MAXX = 9
+PROP_GRID_MINY = 1
+PROP_GRID_MAXY = 9
 
-RANDOMIZE_ITEMS_PERIOD = 100
+VISUAL_GRID_MINX = 1
+VISUAL_GRID_MAXX = 5
+VISUAL_GRID_MINY = 1
+VISUAL_GRID_MAXY = 5
 
-GRID_MINX = 1
-GRID_MAXX = 9
-GRID_MINY = 1
-GRID_MAXY = 9
+EYE_LEFT_LIMIT = 0
+EYE_RIGHT_LIMIT = 4
+EYE_UP_LIMIT = 4
+EYE_DOWN_LIMIT = 0
+
+AGENT_X_POS_LOC_IN_OBS_VEC = 0
+AGENT_Y_POS_LOC_IN_OBS_VEC = 1
+GOAL_X_POS_LOC_IN_OBS_VEC = 2
+GOAL_Y_POS_LOC_IN_OBS_VEC = 3
+PIT_X_POS_LOC_IN_OBS_VEC = 4
+PIT_Y_POS_LOC_IN_OBS_VEC = 5
+ACTION_LOC_IN_OBS_VEC = 6
 
 component = Component(
     transports=[
@@ -99,39 +113,80 @@ component = Component(
 @component.on_join
 def join(session, details):
     global this_session
+    global eye_pos
     print("joined {}".format(details))
     this_session = session
-
-
-NULLACTION = dict(action='Contains', objectId='foo')
-
+    eye_pos = eyePos()
 
 @component.register(
     u"ai.leela.sms.step_world"
 )
 def step_world(actionsJS):
-   actions = json.loads(actionsJS)
-   if(len(actions) == 0):
-      integer_action = 0
-   else:
-      action = dict(action=actions[0])
-      action = action['action']
-      if debug:
-          print("Action:", action)
-      if(action == "NoAction"):
-        integer_action = 0
-      elif(action == "Right"):
-        integer_action = 1
-      elif(action == "Left"):
-        integer_action = 2
-      elif(action == "Up"):
-        integer_action = 3
-      elif(action == "Down"):
-        integer_action = 4
+    actions = json.loads(actionsJS)
 
-   environment_state =environment.step([integer_action])['GridWorldLearning'].vector_observations
-   response = construct_response_with_environment_state(environment_state[0])
-   return(json.dumps(response))
+    if (len(actions) == 0):
+        action = "NoAction"
+        integer_action = 0
+    else:
+        action = dict(action=actions[0])
+        action = action['action']
+        integer_action = check_action(action)
+
+    if (integer_action == -1):
+        handle_eye_action_in_python(action)
+        environment_state = environment.step([0])['GridWorldLearning'].vector_observations
+    else:
+        environment_state = environment.step([integer_action])['GridWorldLearning'].vector_observations
+    response = construct_response_with_environment_state(environment_state[0], [action],eye_pos.x, eye_pos.y)
+    return (json.dumps(response))
+
+
+def check_action(action):
+    integer_action = -1
+
+    if (action == "NoAction"):
+       integer_action = 0
+    elif (action == "Right"):
+       integer_action = 1
+    elif (action == "Left"):
+       integer_action = 2
+    elif (action == "Up"):
+       integer_action = 3
+    elif (action == "Down"):
+       integer_action = 4
+    elif (action == "Grasp"):
+       integer_action = 5
+    elif (action == "Ungrasp"):
+       integer_action = 6
+
+    return integer_action
+
+def limit_move_eye_left():
+    if (eye_pos.x != EYE_LEFT_LIMIT):
+        eye_pos.x -= 1
+
+def limit_move_eye_right():
+    if (eye_pos.x != EYE_RIGHT_LIMIT):
+        eye_pos.x += 1
+def limit_move_eye_up():
+    if (eye_pos.y != EYE_UP_LIMIT):
+        eye_pos.y += 1
+
+def limit_move_eye_down():
+    if (eye_pos.y != EYE_DOWN_LIMIT):
+        eye_pos.y -= 1
+
+def handle_eye_action_in_python(action):
+    if (action == "EyeLeft"):
+        limit_move_eye_left()
+    elif (action == "EyeRight"):
+        limit_move_eye_right()
+    elif (action == "EyeUp"):
+        limit_move_eye_up()
+    elif (action == "EyeDown"):
+        limit_move_eye_down()
+
+
 
 @component.register(
     u"ai.leela.sms.do_something_in_sms"
@@ -160,11 +215,11 @@ def get_capabilities():
     sensors = {}
     wrapper['sensors'] = sensors
     items = {}
-    # send back a list of all primtive item names
+    # send back a list of all primitive item names
     for name in allItemNames():
         items[name] = True
     actions_list = [
-        "NoAction","Left", "Right", "Up", "Down",
+        "NoAction","Left", "Right", "Up", "Down","EyeLeft", "EyeRight","EyeUp","EyeDown","Grasp","Ungrasp"
     ]
     sensors['actions'] = actions_list
     sensors['items'] = items
@@ -172,57 +227,88 @@ def get_capabilities():
     return (json.dumps(wrapper))
 
 
+class eyePos():
+
+    def __init__(self,x: int=2,y: int=2,):
+        self.x = x
+        self.y = y
+
+
 
 # we need to return a list of primitive item names when we respond to get_capabilities
 def allItemNames():
     itemNames = []
     # absolute body position names
-    for x in range(GRID_MINX, GRID_MAXX):
-        for y in range(GRID_MINY, GRID_MAXY):
-            locname = f'hp{x:d}{y:d}'
-            itemNames.append(locname)
+    for x in range(PROP_GRID_MINX, PROP_GRID_MAXX):
+        for y in range(PROP_GRID_MINY, PROP_GRID_MAXY):
+            proprioceptive_grid_locname = f'hp{x:d}{y:d}'
+            itemNames.append(proprioceptive_grid_locname)
+
+    for x in range(VISUAL_GRID_MINX, VISUAL_GRID_MAXX):
+        for y in range(VISUAL_GRID_MINY, VISUAL_GRID_MAXY):
+            visual_grid_locname = f'vf{x:d}{y:d}'
+            itemNames.append(visual_grid_locname)
     return itemNames
 
 # Adds agent position items to the ITEMS dict
-def map_agent_position_to_grid_sensor_items(items, observation_vector):
-   clear_position_items(items)
+def update_proprioceptive_grid_sensor_items(items, observation_vector,x_pos_loc,y_pos_loc):
    if debug:
        print("Observation vector",observation_vector)
-   agent_x = observation_vector[0]
-   agent_z = observation_vector[1]
+   agent_x = observation_vector[x_pos_loc]
+   agent_z = observation_vector[y_pos_loc]
    grid_x = 1+int(ceil(agent_x))
    grid_z = 1+int(ceil(agent_z))
    locname = f'hp{grid_x:d}{grid_z:d}'
    if debug:
-       print('locname',locname)
+       print('proprioceptive grid locname',locname)
    items[locname] = True
 
-def clear_position_items(items):
-    for x in range(GRID_MINX, GRID_MAXX):
-        for y in range(GRID_MINY, GRID_MAXY):
+
+
+def update_visual_grid_sensor_items(items, observation_vector,x_pos_loc,y_pos_loc,eye_pos_x,eye_pos_y):
+   if debug:
+       print("Observation vector",observation_vector)
+   agent_x = observation_vector[x_pos_loc]
+   agent_z = observation_vector[y_pos_loc]
+   grid_x = (1+int(ceil(agent_x)) - eye_pos_x)
+   grid_z = (1+int(ceil(agent_z)) - eye_pos_y)
+   locname = f'vf{grid_x:d}{grid_z:d}'
+   if debug:
+       print('visual grid locname', locname)
+   items[locname] = True
+
+
+
+
+def clear_proprioceptive_grid_items(items):
+    for x in range(PROP_GRID_MINX, PROP_GRID_MAXX):
+        for y in range(PROP_GRID_MINY, PROP_GRID_MAXY):
             locname = f'hp{x:d}{y:d}'
             items[locname] = False
-def map_observation_vector_action_to_text(action):
-    if (action == 0):
-        return_action = "NoAction"
-    elif (action == 1):
-        return_action = "Right"
-    elif (action == 2):
-        return_action = "Left"
-    elif (action == 3):
-        return_action = "Up"
-    elif (action == 4):
-        return_action = "Down"
-    return([return_action])
 
-def construct_response_with_environment_state(observation_vector):
+def clear_visual_grid_items(items):
+    for x in range(VISUAL_GRID_MINX, VISUAL_GRID_MAXX):
+        for y in range(VISUAL_GRID_MINY, VISUAL_GRID_MAXY):
+            locname = f'vf{x:d}{y:d}'
+            items[locname] = False
+
+
+
+def construct_response_with_environment_state(observation_vector,action,eye_pos_x,eye_pos_y):
    global this_session
    response = {}
    #items is a dict of {itemName1: v1, itemName2, v2, ...}
    items = {}
-   map_agent_position_to_grid_sensor_items(items,observation_vector)
+   clear_proprioceptive_grid_items(items)
+   update_proprioceptive_grid_sensor_items(items,observation_vector,AGENT_X_POS_LOC_IN_OBS_VEC,AGENT_Y_POS_LOC_IN_OBS_VEC)
+   update_proprioceptive_grid_sensor_items(items,observation_vector,GOAL_X_POS_LOC_IN_OBS_VEC,GOAL_Y_POS_LOC_IN_OBS_VEC)
+   update_proprioceptive_grid_sensor_items(items,observation_vector,PIT_X_POS_LOC_IN_OBS_VEC,PIT_Y_POS_LOC_IN_OBS_VEC)
+   clear_visual_grid_items(items)
+   update_visual_grid_sensor_items(items, observation_vector, AGENT_X_POS_LOC_IN_OBS_VEC,AGENT_Y_POS_LOC_IN_OBS_VEC,eye_pos_x,eye_pos_y)
+   update_visual_grid_sensor_items(items, observation_vector, GOAL_X_POS_LOC_IN_OBS_VEC, GOAL_Y_POS_LOC_IN_OBS_VEC,eye_pos_x,eye_pos_y)
+   update_visual_grid_sensor_items(items, observation_vector, PIT_X_POS_LOC_IN_OBS_VEC,PIT_Y_POS_LOC_IN_OBS_VEC,eye_pos_x,eye_pos_y)
    response['items'] = items
-   response['actions'] = map_observation_vector_action_to_text(observation_vector[6])
+   response['actions'] = action
    # fixme : debuginfo wants a list of all object positions
    #processed_objects = list(map(lambda obj: {'name':obj.name,'x': int(obj.pos.x),'y':int(obj.pos.y)},objects))
    #response['debuginfo'] =  processed_objects
@@ -235,6 +321,7 @@ def construct_response_with_environment_state(observation_vector):
 
 if __name__ == "__main__":
    #environment = UnityEnvironment(file_name=None)
+
    environment = UnityEnvironment(file_name=unity_world)
    environment.reset(train_mode=False)
    run([component])

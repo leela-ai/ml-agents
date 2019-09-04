@@ -22,6 +22,7 @@ public class GridAcademy : Academy
     public GameObject agentPref;
     public GameObject goalPref;
     public GameObject pitPref;
+    public GameObject springyThingPref;
     GameObject[] objects;
 
     GameObject plane;
@@ -35,7 +36,7 @@ public class GridAcademy : Academy
         gridSize = (int)resetParameters["gridSize"];
         cam = camObject.GetComponent<Camera>();
 
-        objects = new GameObject[3] { agentPref, goalPref, pitPref };
+        objects = new GameObject[4] { agentPref, goalPref, pitPref, springyThingPref };
 
         agentCam = GameObject.Find("agentCam").GetComponent<Camera>();
 
@@ -66,6 +67,9 @@ public class GridAcademy : Academy
         {
             playersList.Add(1);
         }
+
+        playersList.Add(3);
+
         players = playersList.ToArray();
 
         plane.transform.localScale = new Vector3(gridSize / 10.0f, 1f, gridSize / 10.0f);
@@ -90,6 +94,7 @@ public class GridAcademy : Academy
         {
             DestroyImmediate(actor);
         }
+        
         SetEnvironment();
 
         actorObjs.Clear();
@@ -101,7 +106,8 @@ public class GridAcademy : Academy
         }
         int[] numbersA = Enumerable.ToArray(numbers);
 
-        for (int i = 0; i < players.Length; i++)
+  
+   for (int i = 0; i < players.Length; i++)
         {
             int x = (numbersA[i]) / gridSize;
             int y = (numbersA[i]) % gridSize;
@@ -110,10 +116,11 @@ public class GridAcademy : Academy
             actorObjs.Add(actorObj);
         }
 
+        
         int x_a = (numbersA[players.Length]) / gridSize;
         int y_a = (numbersA[players.Length]) % gridSize;
         trueAgent.transform.position = new Vector3(x_a, -0.25f, y_a);
-
+        actorObjs[(int) resetParameters["numGoals"]+ (int) resetParameters["numObstacles"]].transform.position = trueAgent.transform.position;
     }
 
     public override void AcademyStep()

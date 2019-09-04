@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.Linq;
 using MLAgents;
+using System.Collections.Generic;
+
 
 public class GridAgent : Agent
 {
@@ -25,6 +27,8 @@ public class GridAgent : Agent
     private const int Down = 2;
     private const int Left = 3;
     private const int Right = 4;
+    private const int Grasp = 5;
+    private const int Ungrasp = 6;
 
     public override void InitializeAgent()
     {
@@ -33,8 +37,7 @@ public class GridAgent : Agent
 
     public override void CollectObservations()
     {
-        // There are no numeric observations to collect as this environment uses visual
-        // observations.
+        // Numeric observations are the positions of the agent, goal and pit
 
         AddVectorObs(gameObject.transform.position.x);
         AddVectorObs(gameObject.transform.position.z);
@@ -55,6 +58,27 @@ public class GridAgent : Agent
         }
     }
 
+    List<Rigidbody> lastTouched = new List<Rigidbody>();
+
+    void OnCollisionEnter(Collision c)
+    {
+        Debug.Log(string.Format("OnCollisionEnter {0}", c));
+        lastTouched.Add(c.rigidbody);
+
+    }
+
+    private void OnCollisionExit(Collision c)
+    {
+        lastTouched.Remove(c.rigidbody);
+    }
+
+    private void addGraspJoint() {
+            if (lastTouched.Count > 0)
+            {
+                var joint = gameObject.AddComponent<FixedJoint>();
+                joint.connectedBody = lastTouched[0];
+            }
+    }
     /// <summary>
     /// Applies the mask for the agents action to disallow unnecessary actions.
     /// </summary>
@@ -86,6 +110,29 @@ public class GridAgent : Agent
         }
     }
 
+
+    public void destroySpring()
+    {
+        SpringJoint spring = gameObject.GetComponent<SpringJoint>();
+        if (spring != null)
+        {
+            Destroy(spring);
+        } else
+        {
+            Debug.Log("spring is null");
+        }
+    }
+
+    public void createSpring()
+    {
+        SpringJoint sjoint = gameObject.AddComponent<SpringJoint>();
+        GameObject springyThing = academy.actorObjs[(int)academy.resetParameters["numGoals"] + (int)academy.resetParameters["numObstacles"]];
+        sjoint.connectedBody = springyThing.GetComponent<Rigidbody>();
+
+        sjoint.damper = 100;
+        sjoint.spring = 10000;
+    }
+
     // to be implemented by the developer
     public override void AgentAction(float[] vectorAction, string textAction)
     {
@@ -94,26 +141,62 @@ public class GridAgent : Agent
         int action = Mathf.FloorToInt(currentAction);
 
         Vector3 targetPos = transform.position;
+
+        
+
+
         switch (action)
         {
             case NoAction:
                 // do nothing
+                destroySpring();
+                createSpring();
+
+
                 break;
             case Right:
+                destroySpring();
                 targetPos = transform.position + new Vector3(1f, 0, 0f);
+                createSpring();
+                Debug.Log(string.Format("action = {0}", action));
+
                 break;
             case Left:
+                destroySpring();
                 targetPos = transform.position + new Vector3(-1f, 0, 0f);
+                createSpring();
+                Debug.Log(string.Format("action = {0}", action));
+
                 break;
             case Up:
+                destroySpring();
                 targetPos = transform.position + new Vector3(0f, 0, 1f);
+                createSpring();
+                Debug.Log(string.Format("action = {0}", action));
+
                 break;
             case Down:
+                destroySpring();
                 targetPos = transform.position + new Vector3(0f, 0, -1f);
+                createSpring();
+                Debug.Log(string.Format("action = {0}", action));
+
+                break;
+            case Grasp:
+                Debug.Log(string.Format("action = {0} Grasp", action));
+                addGraspJoint();
+                break;
+            case Ungrasp:
+                Debug.Log(string.Format("action = {0}  Ungrasp", action));
+                FixedJoint fJ = gameObject.GetComponent<FixedJoint>();
+                Destroy(fJ);
                 break;
             default:
                 throw new ArgumentException("Invalid action value");
         }
+
+       
+        
 
         Collider[] blockTest = Physics.OverlapBox(targetPos, new Vector3(0.3f, 0.3f, 0.3f));
         if (blockTest.Where(col => col.gameObject.CompareTag("wall")).ToArray().Length == 0)
@@ -131,12 +214,13 @@ public class GridAgent : Agent
                 SetReward(-1f);
             }
         }
+        
     }
 
     // to be implemented by the developer
     public override void AgentReset()
     {
-        academy.AcademyReset();
+//        academy.AcademyReset();
     }
 
     public void FixedUpdate()
