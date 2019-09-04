@@ -31,6 +31,7 @@ public class GridAcademy : Academy
     GameObject sE;
     GameObject sW;
 
+
     public override void InitializeAcademy()
     {
         gridSize = (int)resetParameters["gridSize"];
