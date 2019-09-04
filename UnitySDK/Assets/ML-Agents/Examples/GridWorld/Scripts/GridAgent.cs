@@ -58,26 +58,27 @@ public class GridAgent : Agent
         }
     }
 
-    List<Rigidbody> lastTouched = new List<Rigidbody>();
 
-    void OnCollisionEnter(Collision c)
+    private void graspObject()
     {
-        Debug.Log(string.Format("OnCollisionEnter {0}", c));
-        lastTouched.Add(c.rigidbody);
-
-    }
-
-    private void OnCollisionExit(Collision c)
-    {
-        lastTouched.Remove(c.rigidbody);
-    }
-
-    private void addGraspJoint() {
-            if (lastTouched.Count > 0)
+        Collider[] blockTest = Physics.OverlapBox(transform.position, new Vector3(1.3f, 1.3f, 1.3f));
+        foreach (Collider col in blockTest) { 
+            if (col.gameObject.CompareTag("pit"))
             {
-                var joint = gameObject.AddComponent<FixedJoint>();
-                joint.connectedBody = lastTouched[0];
+                Debug.Log("graspObject found overlapping pit object");
+                addGraspJoint(col.attachedRigidbody);
             }
+        }
+    }
+
+   
+
+    //GameObject[] FindGameObjectsWithTag(string tag)
+
+    private void addGraspJoint(Rigidbody r) { 
+        var joint = gameObject.AddComponent<FixedJoint>();
+        joint.connectedBody = r;
+            
     }
     /// <summary>
     /// Applies the mask for the agents action to disallow unnecessary actions.
@@ -184,7 +185,7 @@ public class GridAgent : Agent
                 break;
             case Grasp:
                 Debug.Log(string.Format("action = {0} Grasp", action));
-                addGraspJoint();
+                graspObject();
                 break;
             case Ungrasp:
                 Debug.Log(string.Format("action = {0}  Ungrasp", action));
