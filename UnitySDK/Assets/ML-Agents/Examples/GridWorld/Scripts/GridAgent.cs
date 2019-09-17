@@ -150,10 +150,6 @@ public class GridAgent : Agent
         {
             case NoAction:
                 // do nothing
-                destroySpring();
-                createSpring();
-
-
                 break;
             case Right:
                 destroySpring();
