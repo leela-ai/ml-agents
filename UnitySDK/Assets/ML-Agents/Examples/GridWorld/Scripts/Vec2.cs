@@ -54,7 +54,7 @@ namespace Blocksworld
         }
 
 
-        public Vec2 add(Vec2 a)
+        public Vec2 Add(Vec2 a)
         {
             Vec2 n = new Vec2(x, y);
             n.x += a.x;

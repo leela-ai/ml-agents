@@ -6,9 +6,9 @@ namespace Blocksworld
     public class HandObject : SimpleObject
     {
 
-        long graspStartTime = 0;
-        long ungraspStartTime = 0;
-        bool reflexGrasp = false;
+        public long graspStartTime = 0;
+        public long ungraspStartTime = 0;
+        public bool reflexGrasp = false;
 
         // degrees
         public int rotation = 0;

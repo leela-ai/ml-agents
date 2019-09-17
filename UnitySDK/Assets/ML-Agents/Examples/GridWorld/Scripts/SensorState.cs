@@ -114,7 +114,7 @@ namespace Blocksworld
 
             return out.toString();
     */
-            return "TODO:SensorState.ToString Not Yet Implemented"
+            return "TODO:SensorState.ToString Not Yet Implemented";
         }
 
 
@@ -126,7 +126,7 @@ namespace Blocksworld
             foreach (KeyValuePair<String,SensorInput> entry in items)
             {
                 SensorInput item = entry.Value;
-                itemSet.put(entry.Key, item.value);
+                itemSet.Add(entry.Key, item.value);
             }
             obj.Add("items", itemSet);
             obj.Add("actions", actions);

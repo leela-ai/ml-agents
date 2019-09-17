@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+
 
 namespace Blocksworld
 {
@@ -49,6 +51,32 @@ namespace Blocksworld
         long graspRefractoryPeriod;
         long graspReflexEnabledBefore;
         double graspReflexProbability = 0;
+
+        void readGridLimits() {
+            
+            handMinX = 1;
+            handMinY = 1;
+            handMaxX = 5;
+            handMaxY = 5;
+            
+            // The coarse visual field system ranges from 1 to 5 in x and y
+            visualFieldMinX = 1;
+            visualFieldMinY = 1;
+            visualFieldMaxX = 5;
+            visualFieldMaxY = 5;
+            
+            // The glance field ranges from 0 to 4 in x and y
+            glanceFieldMinX = 0;
+            glanceFieldMinY = 0;
+            glanceFieldMaxX = 4;
+            glanceFieldMaxY = 4;
+            
+            handPropField = new SchemaField(handMinX, handMinY, handMaxX, handMaxY);
+            visualField = new SchemaField(visualFieldMinX, visualFieldMinY, visualFieldMaxX, visualFieldMaxY);
+            glanceField = new SchemaField(glanceFieldMinX, glanceFieldMinY, glanceFieldMaxX, glanceFieldMaxY);
+        }
+        
+
 
         public void readConfigParams()
         {
@@ -117,11 +145,9 @@ namespace Blocksworld
         public static int glanceFieldMaxY = 4;
 
 
-        public SchemaField handPropField = new SchemaField(handMinX, handMinY, handMaxX, handMaxY);
-        public SchemaField visualField = new SchemaField(visualFieldMinX, visualFieldMinY, visualFieldMaxX, visualFieldMaxY);
-        public SchemaField globalField = new SchemaField(globalFieldMinX, globalFieldMinY, globalFieldMaxX, globalFieldMaxY);
-        public SchemaField glanceField = new SchemaField(glanceFieldMinX, glanceFieldMinY, glanceFieldMaxX, glanceFieldMaxY);
-
+        public SchemaField handPropField;
+        public SchemaField visualField;
+        public SchemaField glanceField;
 
         // flags to control whether eye motion is allowed and hand rotation is allowed
 
@@ -210,6 +236,9 @@ namespace Blocksworld
 
         public BlocksWorldSensoriMotorSystem()
         {
+
+            readConfigParams();
+            readGridLimits();
 
             block1 = new SimpleObject(this, "b1", colors[PINK], TEXTURE_0, "circle", 0, 0); // 
             block2 = new SimpleObject(this, "b2", colors[YELLOW], TEXTURE_1, "triangle", 0, 0);
@@ -471,7 +500,7 @@ namespace Blocksworld
                 randomlyMoveBlocks();
             }
 
-            setTouchSensors(sensors);
+            setTouchSensors();
             setProprioSensors(sensors);
             setVisualSensors(sensors);
 
@@ -486,19 +515,16 @@ namespace Blocksworld
             // just return the list of primitive actions we were just
             // given, plus any reflex actions we executed
 
-            actions.addAll(reflexActions);
+            actions.AddRange(reflexActions);    
 
             sensors.setActions(actions);
-            sensors.setClock(clock);
-            List objlocs = getDebugState();
+            sensors.setClock(clock());
+            List<Dictionary<String,Object>> objlocs = getDebugState();
             sensors.setDebugInfo(objlocs);
 
-            Map<String, Object> stateMap = sensors.toMap();
-            if (com.jleela.brain.BrainServer.crossbar != null)
-            {
-                com.jleela.brain.BrainServer.crossbar.publishSMSRender(stateMap);
-            }
-            reflexActions.clear();
+            Dictionary<String, Object> stateMap = sensors.toMap();
+            
+            reflexActions.Clear();
 
             return stateMap;
 
@@ -507,13 +533,14 @@ namespace Blocksworld
         public void doActions(List<String> actions)
         {
             //HashMap<String,Action> outputList
-            for (String aname : actions)
+            foreach (String aname in actions)
             {
-                Action.Type action = Action.Type.valueOf(aname);
+                // Action.Type action = Action.Type.valueOf(aname);
+                Enum.TryParse(aname, out Action.Type action);
                 // CODE HERE To execute actions
                 switch (action)
                 {
-                    case hand1_rotate_cw:
+                    case Action.Type.hand1_rotate_cw:
                         if (enableHandRotation)
                         {
                             hand1.rotateClockwise();
@@ -523,7 +550,7 @@ namespace Blocksworld
                             //logger.warn("HAND1_ROTATE_CW disabled");
                         }
                         break;
-                    case hand1_rotate_ccw:
+                    case Action.Type.hand1_rotate_ccw:
                         if (enableHandRotation)
                         {
                             hand1.rotateCounterClockwise();
@@ -533,44 +560,44 @@ namespace Blocksworld
                             //                    logger.warn("HAND1_ROTATE_CCW disabled");
                         }
                         break;
-                    case handf:
-                        forward(hand1);
+                    case Action.Type.handf:
+                        moveForward(hand1);
                         break;
-                    case handb:
-                        back(hand1);
+                    case Action.Type.handb:
+                        moveBack(hand1);
                         break;
-                    case handl:
-                        left(hand1);
+                    case Action.Type.handl:
+                        moveLeft(hand1);
                         break;
-                    case handr:
-                        right(hand1);
+                    case Action.Type.handr:
+                        moveRight(hand1);
                         break;
-                    case hand1_home:
+                    case Action.Type.hand1_home:
                         if (enableTestActions)
                         {
                             moveTo(hand1, 1, 1);
                         }
                         break;
-                    case hand2_forward:
-                        forward(hand2);
+                    case Action.Type.hand2_forward:
+                        moveForward(hand2);
                         break;
-                    case hand2_back:
-                        back(hand2);
+                    case Action.Type.hand2_back:
+                        moveBack(hand2);
                         break;
-                    case hand2_left:
-                        left(hand2);
+                    case Action.Type.hand2_left:
+                        moveLeft(hand2);
                         break;
-                    case hand2_right:
-                        right(hand2);
+                    case Action.Type.hand2_right:
+                        moveRight(hand2);
                         break;
-                    case hand2_home:
+                    case Action.Type.hand2_home:
                         if (enableTestActions && enableHand2)
                         {
                             moveTo(hand2, 1, 1);
                         }
                         break;
 
-                    case eyeb:
+                    case Action.Type.eyeb:
                         if (enableEyeMotion)
                         {
                             limitBack(eye);
@@ -581,7 +608,7 @@ namespace Blocksworld
                         }
                         break;
 
-                    case eyef:
+                    case Action.Type.eyef:
                         if (enableEyeMotion)
                         {
                             limitForward(eye);
@@ -592,7 +619,7 @@ namespace Blocksworld
                         }
                         break;
 
-                    case eyel:
+                    case Action.Type.eyel:
                         if (enableEyeMotion)
                         {
                             limitLeft(eye);
@@ -603,7 +630,7 @@ namespace Blocksworld
                         }
                         break;
 
-                    case eyer:
+                    case Action.Type.eyer:
                         if (enableEyeMotion)
                         {
                             limitRight(eye);
@@ -614,7 +641,7 @@ namespace Blocksworld
                         }
                         break;
 
-                    case eye_home:
+                    case Action.Type.eye_home:
                         if (enableTestActions)
                         {
                             eye.pos.x = eye.pos.y = 2;
@@ -622,121 +649,121 @@ namespace Blocksworld
                         break;
 
 
-                    case grasp:  // grasp any object touching the hand, object touching hand front is preferred
+                    case Action.Type.grasp:  // grasp any object touching the hand, object touching hand front is preferred
                         if (enableGrasping)
                         {
                             grasp(hand1);
-                            break;
                         }
-                    case graspl:   // grasp specifically object on left of hand
+                        break;
+                    case Action.Type.graspl:   // grasp specifically object on left of hand
                         if (enableGrasping)
                         {
                             graspl(hand1);
-                            break;
                         }
-                    case graspr: // grasp specifically object on right of hand
+                        break;
+                    case Action.Type.graspr: // grasp specifically object on right of hand
                         if (enableGrasping)
                         {
                             graspr(hand1);
-                            break;
                         }
-                    case graspf: // grasp specifically object on front of hand
+                        break;
+                    case Action.Type.graspf: // grasp specifically object on front of hand
                         if (enableGrasping)
                         {
                             graspf(hand1);
-                            break;
                         }
-                    case graspb: // grasp specifically object on back of hand
+                        break;
+                    case Action.Type.graspb: // grasp specifically object on back of hand
                         if (enableGrasping)
                         {
                             graspb(hand1);
-                            break;
                         }
+                        break;
 
 
 
-                    case ungrasp:
+                    case Action.Type.ungrasp:
                         if (enableGrasping)
                         {
                             ungrasp(hand1);
-                            break;
                         }
-                    case hand2_graspl:
+                        break;
+                    case Action.Type.hand2_graspl:
                         if (enableGrasping)
                         {
                             graspl(hand1);
-                            break;
                         }
-                    case hand2_graspr:
+                        break;
+                    case Action.Type.hand2_graspr:
                         if (enableGrasping)
                         {
                             graspr(hand1);
-                            break;
                         }
-                    case hand2_graspf:
+                        break;
+                    case Action.Type.hand2_graspf:
                         if (enableGrasping)
                         {
                             graspf(hand1);
-                            break;
                         }
-                    case hand2_graspb:
+                        break;
+                    case Action.Type.hand2_graspb:
                         if (enableGrasping)
                         {
                             graspb(hand1);
-                            break;
                         }
-                    case hand2_ungrasp:
+                        break;
+                    case Action.Type.hand2_ungrasp:
                         if (enableGrasping)
                         {
                             ungrasp(hand1);
-                            break;
                         }
-
-                    case magic_action:
+                        break;
+                    case Action.Type.magic_action:
                         if (testEnableExplainedResults)
                         {
-                            double rand = Math.random();
-                            if (rand < 0.01)
+                            double r = rand.NextDouble();
+                            if (r < 0.01)
                             {
                                 // use MAGIC_ACTION to put block2 at 32
                                 moveTo(block2, 3, 2);
                             }
                         }
                         break;
-                    case reverse_magic_action:
+                    case Action.Type.reverse_magic_action:
                         if (testEnableExplainedResults)
                         {
                             remove(block2);
                         }
                         break;
-                    case nullaction:
+                    case Action.Type.nullaction:
                         break;
 
 
                     default:
-                        System.out.println("unknown Action type " + action);
+                        Console.Write("unknown Action type " + action);
+                        break;
                 }
             }
         }
 
-        public void setTouchSensors(SensorState w)
+        public void setTouchSensors()
         {
-            setTouchSensors(w, hand1);
+            setTouchSensors(hand1);
 
-            sensors.setSensorValue(hand1.name + ".hcl", hand1.grasping, clock);
-            sensors.setSensorValue(hand1.name + ".hgr", hand1.graspedObject != null, clock);
+            sensors.setSensorValue(hand1.name + ".hcl", hand1.grasping, clock());
+            sensors.setSensorValue(hand1.name + ".hgr", hand1.graspedObject != null, clock());
 
-            sensors.setSensorValue(hand2.name + ".hcl", hand2.grasping, clock);
-            sensors.setSensorValue(hand2.name + ".hgr", hand2.graspedObject != null, clock);
+            sensors.setSensorValue(hand2.name + ".hcl", hand2.grasping, clock());
+            sensors.setSensorValue(hand2.name + ".hgr", hand2.graspedObject != null, clock());
 
         }
 
         public void setProprioSensors(SensorState w)
         {
             // Set Proprioceptive sensors for each of two hands and the eye to be on
-            setObjProprioSensors(hand1, w);
-            setObjProprioSensors(hand2, w);
-            setObjProprioSensors(eye, w);
+            setObjProprioSensors(hand1);
+            setObjProprioSensors(hand2);
+            setObjProprioSensors(eye);
         }
 
         public void setVisualSensors(SensorState w)
@@ -751,39 +778,39 @@ namespace Blocksworld
             }
         }
 
-        public void setTouchSensors(SensorState w, HandObject h)
+        public void setTouchSensors(HandObject h)
         {
-            SimpleObject front = objectTouchingFront(h);
-            SimpleObject back = objectTouchingBack(h);
-            SimpleObject left = objectTouchingLeft(h);
-            SimpleObject right = objectTouchingRight(h);
+            SimpleObject _front = objectTouchingFront(h);
+            SimpleObject _back = objectTouchingBack(h);
+            SimpleObject _left = objectTouchingLeft(h);
+            SimpleObject _right = objectTouchingRight(h);
 
             // Set coarse tactile sensors
             //        sensors.setSensorValue(h.name + ".tactf", front != null && hand1.graspedObject == null , clock);
-            sensors.setSensorValue(h.name + ".tactf", front != null, clock);
-            sensors.setSensorValue(h.name + ".tactb", back != null, clock);
-            sensors.setSensorValue(h.name + ".tactl", left != null, clock);
-            sensors.setSensorValue(h.name + ".tactr", right != null, clock);
+            sensors.setSensorValue(h.name + ".tactf", _front != null, clock());
+            sensors.setSensorValue(h.name + ".tactb", _back != null, clock());
+            sensors.setSensorValue(h.name + ".tactl", _left != null, clock());
+            sensors.setSensorValue(h.name + ".tactr", _right != null, clock());
 
             // texture sensor
-            SimpleObject objs[] = new SimpleObject[] { front, back, left, right };
+            SimpleObject[] objs = { _front, _back, _left, _right };
             bool text0 = false;
             bool text1 = false;
             bool text2 = false;
             bool text3 = false;
 
-            for (SimpleObject obj : objs)
+            foreach (SimpleObject obj in objs)
             {
-                text0 = text0 || (obj != null && obj.texture.equals(TEXTURE_0));
-                text1 = text1 || (obj != null && obj.texture.equals(TEXTURE_1));
-                text2 = text2 || (obj != null && obj.texture.equals(TEXTURE_2));
-                text3 = text3 || (obj != null && obj.texture.equals(TEXTURE_3));
+                text0 = text0 || (obj != null && obj.texture.Equals(TEXTURE_0));
+                text1 = text1 || (obj != null && obj.texture.Equals(TEXTURE_1));
+                text2 = text2 || (obj != null && obj.texture.Equals(TEXTURE_2));
+                text3 = text3 || (obj != null && obj.texture.Equals(TEXTURE_3));
             }
 
-            sensors.setSensorValue(h.name + ".text0", text0, clock);
-            sensors.setSensorValue(h.name + ".text1", text1, clock);
-            sensors.setSensorValue(h.name + ".text2", text2, clock);
-            sensors.setSensorValue(h.name + ".text3", text3, clock);
+            sensors.setSensorValue(h.name + ".text0", text0, clock());
+            sensors.setSensorValue(h.name + ".text1", text1, clock());
+            sensors.setSensorValue(h.name + ".text2", text2, clock());
+            sensors.setSensorValue(h.name + ".text3", text3, clock());
         }
 
         public void setCoarseVisualFieldSensors(SensorState w)
@@ -795,16 +822,20 @@ namespace Blocksworld
             int maxx = visualField.maxX;
             int maxy = visualField.maxY;
 
+            int glanceMidX = (glanceField.maxX - glanceField.minX)/2 + glanceField.minX;
+            int glanceMidY = (glanceField.maxY - glanceField.minY)/2 + glanceField.minY;
+
+
             // Loop through every position in the visual sensor grid and set Sensor Value to true if there is an object at x and y 
             for (int i = minx; i <= maxx; i++)
             {
                 for (int j = miny; j <= maxy; j++)
                 {
-                    String nameForVisualSensor = String.format("vf%s%s", i, j);
+                    String nameForVisualSensor = $"vf{i}{j}";
                     // mapping from coarse visual field (i,j) to global field in which objects are positioned
                     // add eye x and y offset but correct for starting position coordinates for the visual Field
-                    SimpleObject isThereAnObjAtPos = objectAtPosition((i + glancex - 2), (j + glancey - 2));
-                    sensors.setSensorValue(nameForVisualSensor, isThereAnObjAtPos != null, clock);
+                    SimpleObject isThereAnObjAtPos = objectAtPosition((i + glancex - glanceMidX), (j + glancey - glanceMidY));
+                    sensors.setSensorValue(nameForVisualSensor, isThereAnObjAtPos != null, clock());
                 }
             }
         }
@@ -820,12 +851,12 @@ namespace Blocksworld
             {
                 for (int y = 1; y < 4; y++)
                 {
-                    String fovColorSensorName = String.format("fov%d%d", x, y);
-                    String fovShapeSensorName = String.format("fvs%d%d", x, y);
+                    String fovColorSensorName = $"fov{x}{y}";
+                    String fovShapeSensorName = $"fvs{x}{y}";
                     // iterate over texture detail names
-                    String nameForFovealCircleSensor = String.format("%s.circle", fovShapeSensorName);
-                    String nameForFovealTriangleSensor = String.format("%s.triangle", fovShapeSensorName);
-                    String nameForFovealSquareSensor = String.format("%s.square", fovShapeSensorName);
+                    String nameForFovealCircleSensor = $"{fovShapeSensorName}.circle";
+                    String nameForFovealTriangleSensor = $"{fovShapeSensorName}.triangle";
+                    String nameForFovealSquareSensor = $"{fovShapeSensorName}.square";
 
                     int thisXPos = ((x + glancex) - FOVEAL_OFFSET);
                     int thisYPos = ((y + glancey) - FOVEAL_OFFSET);
@@ -834,34 +865,38 @@ namespace Blocksworld
                     if (obj == null)
                     {
                         // we have 16 possible colors, hence 16 color sensors at each foveal x,y location
-                        for (int i = 0; i < colors.length; i++)
+                        for (int i = 0; i < colors.Length; i++)
                         {
-                            String nameForFovealColorSensor = String.format("%s.%02d", fovColorSensorName, i);
-                            sensors.setSensorValue(nameForFovealColorSensor, false, clock);
+                            String ipad = i.ToString("D2"); // zero padded two digit int
+                            String nameForFovealColorSensor =$"{fovColorSensorName}.{ipad}";
+                            sensors.setSensorValue(nameForFovealColorSensor, false, clock());
                         }
                         if (enableShapeSensors)
                         {
-                            sensors.setSensorValue(nameForFovealCircleSensor, false, clock);
-                            sensors.setSensorValue(nameForFovealTriangleSensor, false, clock);
-                            sensors.setSensorValue(nameForFovealSquareSensor, false, clock);
+                            sensors.setSensorValue(nameForFovealCircleSensor, false, clock());
+                            sensors.setSensorValue(nameForFovealTriangleSensor, false, clock());
+                            sensors.setSensorValue(nameForFovealSquareSensor, false, clock());
                         }
                     }
                     else
                     {
-                        for (int i = 0; i < colors.length; i++)
+                        for (int i = 0; i < colors.Length; i++)
                         {
                             bool isThisSensorOn = colors[i] == obj.color;
                             // If there is and the color of the object
                             // matches the specific color we are at, turn
                             // this sensor on
-                            String nameForFovealColorSensor = String.format("%s.%02d", fovColorSensorName, i);
-                            sensors.setSensorValue(nameForFovealColorSensor, isThisSensorOn, clock);
+                            String ipad = i.ToString("D2"); // zero padded two digit int
+
+                            String nameForFovealColorSensor = $"{fovColorSensorName}.{ipad}";
+
+                            sensors.setSensorValue(nameForFovealColorSensor, isThisSensorOn, clock());
                         }
                         if (enableShapeSensors)
                         {
-                            sensors.setSensorValue(nameForFovealCircleSensor, "circle".equals(obj.shape), clock);
-                            sensors.setSensorValue(nameForFovealTriangleSensor, "triangle".equals(obj.shape), clock);
-                            sensors.setSensorValue(nameForFovealSquareSensor, "square".equals(obj.shape), clock);
+                            sensors.setSensorValue(nameForFovealCircleSensor, "circle".Equals(obj.shape), clock());
+                            sensors.setSensorValue(nameForFovealTriangleSensor, "triangle".Equals(obj.shape), clock());
+                            sensors.setSensorValue(nameForFovealSquareSensor, "square".Equals(obj.shape), clock());
                         }
                     }
                 }
@@ -884,11 +919,11 @@ namespace Blocksworld
                         // Check to see if there is an object at a specific foveal sensor location
                         SimpleObject obj = objectAtPosition(thisXPos, thisYPos);
                         if (obj == null) {
-                            sensors.setSensorValue(nameForFovealDetailSensor, false, clock);
+                            sensors.setSensorValue(nameForFovealDetailSensor, false, clock());
                         } else {
-                            bool isThisSensorOn = colors[i].equals(obj.color);
+                            bool isThisSensorOn = colors[i].Equals(obj.color);
                             // If there is and the color of the object matches the specific color we are at, turn this sensor on
-                            sensors.setSensorValue(nameForFovealDetailSensor, isThisSensorOn, clock);
+                            sensors.setSensorValue(nameForFovealDetailSensor, isThisSensorOn, clock());
                         }
                     }
                 }
@@ -897,7 +932,7 @@ namespace Blocksworld
         */
 
 
-        public void setObjProprioSensors(SimpleObject obj, SensorState w)
+        public void setObjProprioSensors(SimpleObject obj)
         {
             int minx = obj.minx;
             int miny = obj.miny;
@@ -917,7 +952,7 @@ namespace Blocksworld
                 for (int j = miny; j <= maxy; j++)
                 {
                     String objPos = nameForObjPos(obj, i, j);
-                    sensors.setSensorValue(objPos, ((obj.getPosition().x) == i) && ((obj.getPosition().y) == j), clock);
+                    sensors.setSensorValue(objPos, ((obj.getPosition().x) == i) && ((obj.getPosition().y) == j), clock());
                 }
             }
         }
@@ -929,12 +964,12 @@ namespace Blocksworld
 
         public String nameForObjPos(SimpleObject obj, int x, int y)
         {
-            return String.format("%sp%s%s", obj.name, x, y);
+            return $"{obj.name}p{x}{y}";
         }
 
         SimpleObject objectAtPosition(int x, int y)
         {
-            for (SimpleObject o : objects)
+            foreach (SimpleObject o in objects)
             {
                 Vec2 pos = o.getPosition();
                 if (pos.x == x && pos.y == y)
@@ -979,15 +1014,15 @@ namespace Blocksworld
 
         SimpleObject findObjectByName(String name)
         {
-            for (SimpleObject o : objects)
+            foreach (SimpleObject o in objects)
             {
-                if (o.name.equals(name))
+                if (o.name.Equals(name))
                 {
                     return o;
                 }
             }
 
-            if (eye.name.equals(name))
+            if (eye.name.Equals(name))
             {
                 return eye;
             }
@@ -1121,17 +1156,17 @@ namespace Blocksworld
             SimpleObject back = objectTouchingBack(h);
             SimpleObject left = objectTouchingLeft(h);
             SimpleObject right = objectTouchingRight(h);
-            h.grasp(clock);
-            ArrayList<SimpleObject> touched = new ArrayList<>();
+            h.grasp(clock());
+            List<SimpleObject> touched = new List<SimpleObject>();
 
             if (front != null) touched.Add(front);
             if (back != null) touched.Add(back);
             if (left != null) touched.Add(left);
             if (right != null) touched.Add(right);
 
-            if (touched.size() > 0)
+            if (touched.Count > 0)
             {
-                h.graspedObject = touched.get(rand.Next(touched.size()));
+                h.graspedObject = touched[rand.Next(touched.Count)];
             }
 
         }
@@ -1145,7 +1180,7 @@ namespace Blocksworld
                 obj = front;
             }
             h.graspedObject = obj;
-            h.grasp(clock);
+            h.grasp(clock());
         }
 
         public void graspb(HandObject h)
@@ -1158,7 +1193,7 @@ namespace Blocksworld
                 obj = back;
             }
             h.graspedObject = obj;
-            h.grasp(clock);
+            h.grasp(clock());
         }
 
         public void graspl(HandObject h)
@@ -1171,7 +1206,7 @@ namespace Blocksworld
                 obj = left;
             }
             h.graspedObject = obj;
-            h.grasp(clock);
+            h.grasp(clock());
         }
 
         public void graspr(HandObject h)
@@ -1184,18 +1219,18 @@ namespace Blocksworld
                 obj = right;
             }
             h.graspedObject = obj;
-            h.grasp(clock);
+            h.grasp(clock());
         }
 
         public void ungrasp(HandObject h)
         {
             h.graspedObject = null;
-            h.ungrasp(clock);
+            h.ungrasp(clock());
         }
 
         void remove(SimpleObject o)
         {
-            o.setPosition(-100, -100);
+            o.setPosition(new Vec2(-100, -100));
         }
 
         Vec2 FORWARD = new Vec2(0, 1);
@@ -1208,22 +1243,22 @@ namespace Blocksworld
          * If hand is grasping something, make sure grasped object can move forward.
          * Hand will occupy prior position of grasped object.
          */
-        public void forward(HandObject h)
+        public void moveForward(HandObject h)
         {
             moveHand(h, FORWARD);
         }
 
-        public void back(HandObject h)
+        public void moveBack(HandObject h)
         {
             moveHand(h, BACK);
         }
 
-        public void left(HandObject h)
+        public void moveLeft(HandObject h)
         {
             moveHand(h, LEFT);
         }
 
-        public void right(HandObject h)
+        public void moveRight(HandObject h)
         {
             moveHand(h, RIGHT);
         }
@@ -1244,7 +1279,7 @@ namespace Blocksworld
                 // grasped object target positino
                 Vec2 gdest = gpos.Add(delta);
 
-                // logger.info(clock+": "+h+" grasping g at "+gpos +" moving to "+gdest);
+                // logger.info(clock()+": "+h+" grasping g at "+gpos +" moving to "+gdest);
 
 
                 // Get g out of the way of the hand
@@ -1262,7 +1297,7 @@ namespace Blocksworld
                     // move hand forward
                     h.setPosition(hdest);
                     g.setPosition(gdest);
-                    // logger.info(clock + ": dragged obj "+g+" to "+gdest);
+                    // logger.info(clock() + ": dragged obj "+g+" to "+gdest);
                 }
                 else
                 {
@@ -1279,18 +1314,7 @@ namespace Blocksworld
                 }
             }
 
-            ArrayList<Integer> pos = new ArrayList<>();
-            pos.Add(h.getPosition().x);
-            pos.Add(h.getPosition().y);
-            if (handPositions.containsKey(pos))
-            {
-                handPositions.put(pos, handPositions.get(pos) + 1);
-            }
-            else
-            {
-                handPositions.put(pos, 1);
-            }
-
+          
             invokeGraspReflex(h);
 
         }
@@ -1306,16 +1330,15 @@ namespace Blocksworld
 
             // If the hand is in a grasp due to reflex, and it's been longer than habituation time, it gets
             // 'tired' and opens the hand
-            if (clock - h.graspStartTime > graspHabituationPeriod)
+            if (clock() - h.graspStartTime > graspHabituationPeriod)
             {
                 ungrasp(h);
             }
-            else if (clock - h.ungraspStartTime > graspRefractoryPeriod)
+            else if (clock() - h.ungraspStartTime > graspRefractoryPeriod)
             {
-                if (clock < graspReflexEnabledBefore)
+                if (clock() < graspReflexEnabledBefore)
                 {// grasp reflex is enabled
-                    double rand = Math.random();
-                    if (rand < graspReflexProbability)
+                    if (rand.NextDouble() < graspReflexProbability)
                     { // we have randomly decided to grasp, if anything is touching the hand
                       // TODO we need to send this action back to the Brain, to let it know we did a grasp 
                       // Reflex grasp
@@ -1348,26 +1371,25 @@ namespace Blocksworld
             }
         }
 
-        ConcurrentHashMap<List, Integer> handPositions = new ConcurrentHashMap<>();
-
+        
         /**
          * move a SimpleObject foward one grid position
          */
-        public void forward(SimpleObject obj)
+        public void moveForward(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
             Vec2 dest = pos.Add(FORWARD);
             moveTo(obj, dest);
         }
 
-        public void back(SimpleObject obj)
+        public void moveBack(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
             Vec2 dest = pos.Add(BACK);
             moveTo(obj, dest);
         }
 
-        public void right(SimpleObject obj)
+        public void moveRight(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
             Vec2 dest = pos.Add(RIGHT);
@@ -1375,7 +1397,7 @@ namespace Blocksworld
 
         }
 
-        public void left(SimpleObject obj)
+        public void moveLeft(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
             Vec2 dest = pos.Add(LEFT);
@@ -1391,59 +1413,60 @@ namespace Blocksworld
         public String showWorld()
         {
             StringBuilder b = new StringBuilder();
-            b.append("\n  -------------------\n");
+            b.Append("\n  -------------------\n");
             for (int y = 6; y >= 0; y--)
             {
-                b.append(String.format("%d |", y));
+                b.Append($"{y} |");
                 for (int x = 0; x <= 6; x++)
                 {
                     SimpleObject obj = objectAtPosition(x, y);
                     if (obj == null)
                     {
-                        b.append(String.format("  |"));
+                        b.Append("  |");
                     }
                     else
                     {
-                        b.append(String.format("%s|", obj.name));
+                        b.Append($"{obj.name}|");
                     }
                 }
-                b.append("\n  -------------------\n");
+                b.Append("\n  -------------------\n");
             }
-            b.append("    ");
+            b.Append("    ");
             for (int x = 0; x <= 6; x++)
             {
-                b.append(String.format(" %d ", x));
+                b.Append($" {x} ");
             }
-            return b.toString();
+            return b.ToString();
         }
 
 
-        static int GRID_SIZE = 32;
         static int N_GRIDS = 7;
 
 
-        Map gridcell(SimpleObject obj)
+        Dictionary<String,Object> gridcell(SimpleObject obj)
         {
             int r = (obj.color >> 16) & 0xFF;
             int g = (obj.color >> 8) & 0xFF;
             int b = obj.color & 0xFF;
 
-            Map cell = new ConcurrentHashMap();
-            cell.put("name", obj.name);
-            cell.put("x", obj.getPosition().x);
-            cell.put("y", obj.getPosition().y);
-            String color = String.format("rgb(%d,%d,%d)", r, g, b);
-            cell.put("color", color);
-            cell.put("shape", obj.shape);
+            Dictionary<String,Object> cell = new Dictionary<String,Object>();
+            cell.Add("name", obj.name);
+            cell.Add("x", obj.getPosition().x);
+            cell.Add("y", obj.getPosition().y);
+            String color = $"rgb({r},{g},{b})";
+            cell.Add("color", color);
+            cell.Add("shape", obj.shape);
             return cell;
         }
 
 
         // Return a json object of sensorstate
-        public String jsonifySensorState(SensorState ss)
+        /*
+         * public String jsonifySensorState(SensorState ss)
         {
             return JSONValue.toJSONString(ss.items);
         }
+        */
 
         public List<Dictionary<String,Object>> getDebugState()
         {
@@ -1466,9 +1489,9 @@ namespace Blocksworld
         public List<Dictionary<String,Object>> getDebugObjsList() { throw new Exception("getDebugObjsList not defined"); }
 
         // Returns a list of maps representing the physical object locations
-        public List<SimpleObject> objlocList()
+        public List<Dictionary<String,Object>> objlocList()
         {
-            List<SimpleObject> physobjs = new List<SimpleObject>();
+            List<Dictionary<String,Object>> physobjs = new List<Dictionary<String,Object>>();
             for (int y = 0; y <= N_GRIDS; y++)
             {
                 for (int x = 0; x <= N_GRIDS; x++)
