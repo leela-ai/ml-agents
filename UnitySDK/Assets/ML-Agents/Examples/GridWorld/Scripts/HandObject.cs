@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Blocksworld
 {
@@ -60,7 +61,7 @@ namespace Blocksworld
             rotation = ((rotation - 90) + 360) % 360;
         }
 
-        override public Dictionary<String, Object> toMap()
+        public override Dictionary<String, Object> toMap()
         {
             Dictionary<String, Object> obj = base.toMap();
             obj.Add("rotation", rotation);

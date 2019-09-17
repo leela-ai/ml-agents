@@ -14,6 +14,11 @@ namespace Blocksworld
         {
         }
 
+        public Dictionary<String,SensorInput> Items()
+        {
+            return items;
+        }
+
         public void setClock(long c)
         {
             clock = c;

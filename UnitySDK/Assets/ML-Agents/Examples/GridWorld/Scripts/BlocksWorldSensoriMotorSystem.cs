@@ -5,13 +5,8 @@ namespace Blocksworld
 {
     public class BlocksWorldSensoriMotorSystem
     {
-        public BlocksWorldSensoriMotorSystem()
-        {
-        }
 
-       // Config config;
-
-    public long _clock = 0; // SimpleSensoriMotorSystem has its own clock variable
+        public long _clock = 0; // SimpleSensoriMotorSystem has its own clock variable
 
         public long stepClock()
         {
@@ -133,15 +128,14 @@ namespace Blocksworld
         // Objects placed into the world for the simple sensorimotor system to detect
         // Everything is placed at 0,0
 
-        public ArrayList<SimpleObject> objects = new ArrayList<>();
-        public SimpleObject block1 = new SimpleObject(this, "b1", colors[PINK], TEXTURE_0, "circle", 0, 0); // 
-        public SimpleObject block2 = new SimpleObject(this, "b2", colors[YELLOW], TEXTURE_1, "triangle", 0, 0);
-        public SimpleObject block3 = new SimpleObject(this, "b3", colors[YELLOW], TEXTURE_1, "circle", 0, 0);
-        public SimpleObject block4 = new SimpleObject(this, "b4", colors[PINK], TEXTURE_1, "triangle", 0, 0);
-        public HandObject hand1 = new HandObject(this, "h", colors[BLUE], TEXTURE_2, 0, 0);
-        public HandObject hand2 = new HandObject(this, "j", colors[8], TEXTURE_3, 0, 0);
-        public SimpleObject eye = new SimpleObject(this, "v", colors[11], TEXTURE_0, "circle", 0, 0);
-
+        public List<SimpleObject> objects = new List<SimpleObject>();
+        public SimpleObject block1;
+        public SimpleObject block2;
+        public SimpleObject block3;
+        public SimpleObject block4;
+        public HandObject hand1;
+        public HandObject hand2;
+        public SimpleObject eye;
 
         // Fields associated with colors
 
@@ -169,12 +163,12 @@ namespace Blocksworld
         "rgb(255,100,80"];
         */
 
-        static final int PINK = 9;
-        static final int YELLOW = 12;
-        static final int BLUE = 1;
+        static int PINK = 9;
+        static int YELLOW = 12;
+        static int BLUE = 1;
 
 
-        static final public int colors[] = {
+        static public int[] colors = {
         0x000000, // black
         0x0000FF, // blue
         0x00EEEE, // cyan
@@ -201,30 +195,29 @@ namespace Blocksworld
 
         public int colorToIndex(int c)
         {
-            for (int i = 1; i < colors.length; i++)
+            for (int i = 1; i < colors.Length; i++)
             {
                 int thisC = colors[i];
                 if (c == thisC) return (i);
             }
-            throw new Error("Color not found in colors list: " + c);
+            throw new Exception("Color not found in colors list: " + c);
         }
 
 
-        void loadConfigFile(String configFile)
-        {
-            File cFile = new File("config", configFile);
-            config = ConfigFactory.parseFile(cFile).resolve();
-            //config.checkValid(ConfigFactory.defaultReference());
-            this.config = config;
-            readConfigParams();
 
-        }
 
         // Constructor sets up objects and adds them to the objects list
 
-        public BlocksWorldSensoriMotorSystem(String configFile)
+        public BlocksWorldSensoriMotorSystem()
         {
-            loadConfigFile(configFile);
+
+            block1 = new SimpleObject(this, "b1", colors[PINK], TEXTURE_0, "circle", 0, 0); // 
+            block2 = new SimpleObject(this, "b2", colors[YELLOW], TEXTURE_1, "triangle", 0, 0);
+            block3 = new SimpleObject(this, "b3", colors[YELLOW], TEXTURE_1, "circle", 0, 0);
+            block4 = new SimpleObject(this, "b4", colors[PINK], TEXTURE_1, "triangle", 0, 0);
+            hand1 = new HandObject(this, "h", colors[BLUE], TEXTURE_2, 0, 0);
+            hand2 = new HandObject(this, "j", colors[8], TEXTURE_3, 0, 0);
+            eye = new SimpleObject(this, "v", colors[11], TEXTURE_0, "circle", 0, 0);
 
             eye.setLimit(glanceField.minX, glanceField.minY, glanceField.maxX, glanceField.maxY);
             eye.setPosition(2, 2);
@@ -246,22 +239,22 @@ namespace Blocksworld
          */
         public List<String> usableActionNames()
         {
-            String capabilities[] = {
+            String[] capabilities = {
         "nullaction",
         "handl",
         "handr",
         "handf",
         "handb",
-       "grasp",
+        "grasp",
         //       "graspl",
         //       "graspr",
         //       "graspb",
         //       "graspf",
-       "ungrasp",
-      "eyel",
-      "eyer",
-      "eyef",
-     "eyeb",
+        "ungrasp",
+        "eyel",
+        "eyer",
+        "eyef",
+        "eyeb",
         //"eye_home",
         //"hand1_home"
         //"hand1_rotate_cw",
@@ -275,32 +268,35 @@ namespace Blocksworld
         //"hand2_ungrasp",
         };
 
-            List<String> actions = Arrays.asList(capabilities);
+            List<String> actions = new List<String>(capabilities);
             return actions;
         }
 
         /**
            Return map containing {sensors: {items: { }, actions: [a1,a2,...  ]}}
          */
-        public HashMap getCapabilities()
+        public Dictionary<String,Object> getCapabilities()
         {
-            stepPhysicalWorld("0", new ArrayList<String>());
-            HashMap c = new HashMap();
-            HashMap v = new HashMap();
-            c.put("sensors", v);
-            v.put("actions", usableActionNames());
+            stepPhysicalWorld("0", new List<String>());
+            Dictionary<String, Object> c = new Dictionary<String,Object>();
+            Dictionary<String,Object> v = new Dictionary<String, Object>();
+            c.Add("sensors", v);
+            v.Add("actions", usableActionNames());
 
-            Map items = sensors.sortedItems().stream()
-                .collect(Collectors.toMap(
-                             sensorInput->sensorInput.name, si-> true));
+            Dictionary<String, Object> items = new Dictionary<String, Object>();
 
-            v.put("items", items);
+            foreach (KeyValuePair<String, SensorInput> entry in sensors.Items())
+            {
+               items.Add(entry.Key, true);
+            }
+
+            v.Add("items", items);
 
             return c;
         }
 
 
-        @Override public void initializeObjects()
+        public void initializeObjects()
         {
 
             placeBlocks();
@@ -309,11 +305,11 @@ namespace Blocksworld
 
         void placeHands()
         {
-            objects.add(hand1);
+            objects.Add(hand1);
             moveTo(hand1, 3, 3);
             if (enableHand2)
             {
-                objects.add(hand2);
+                objects.Add(hand2);
                 moveTo(hand2, 5, 5);
             }
             else remove(hand2);
@@ -323,26 +319,26 @@ namespace Blocksworld
         {
             if (enableBlock1)
             {
-                objects.add(block1);
+                objects.Add(block1);
                 moveTo(block1, 1, 5);
             }
 
             if (enableBlock2)
             {
-                objects.add(block2);
+                objects.Add(block2);
                 moveTo(block2, 5, 5);
             }
 
             if (enableBlock3)
             {
-                objects.add(block3);
+                objects.Add(block3);
                 moveTo(block3, 5, 1);
             }
 
             // even if enabled, we put block4 out of the playpen by default, for experiments where we later present novel item
             if (enableBlock4)
             {
-                objects.add(block4);
+                objects.Add(block4);
                 // to get block out of sight, use forceMoveTo, it can move out of max bounds of the block
                 forceMoveTo(block4, 100, 100);
             }
@@ -357,29 +353,29 @@ namespace Blocksworld
         {
             if (enableBlock1)
             {
-                int x = rand.nextInt(5) + 1;
-                int y = rand.nextInt(5) + 1;
+                int x = rand.Next(5) + 1;
+                int y = rand.Next(5) + 1;
                 moveTo(block1, x, y);
             }
 
             if (enableBlock2)
             {
-                int x = rand.nextInt(5) + 1;
-                int y = rand.nextInt(5) + 1;
+                int x = rand.Next(5) + 1;
+                int y = rand.Next(5) + 1;
                 moveTo(block2, x, y);
             }
 
             if (enableBlock3)
             {
-                int x = rand.nextInt(5) + 1;
-                int y = rand.nextInt(5) + 1;
+                int x = rand.Next(5) + 1;
+                int y = rand.Next(5) + 1;
                 moveTo(block3, x, y);
             }
 
             if (enableBlock4)
             {
-                int x = rand.nextInt(5) + 1;
-                int y = rand.nextInt(5) + 1;
+                int x = rand.Next(5) + 1;
+                int y = rand.Next(5) + 1;
                 moveTo(block4, x, y);
             }
 
@@ -399,31 +395,31 @@ namespace Blocksworld
          */
 
 
-        public Map<String, Object> getInfoFromSMS(String name)
+        public Dictionary<String, Object> getInfoFromSMS(String name)
         {
-            LinkedList<String> objs = new LinkedList(Arrays.asList("h", "j", "b1", "b2", "b3", "b4", "v"));
-            Map<String, Object> vals = new HashMap<>();
-            if (objs.contains(name))
+            List<String> objs = new List<String> (){ "h", "j", "b1", "b2", "b3", "b4", "v" };
+            Dictionary<string, object> vals = new Dictionary<string, object>();
+            if (objs.Contains(name))
             {
                 SimpleObject obj = findObjectByName(name);
                 int x = obj.pos.x;
                 int y = obj.pos.y;
-                vals.put(name + "x", x);
-                vals.put(name + "y", y);
+                vals.Add(name + "x", x);
+                vals.Add(name + "y", y);
             }
             return vals;
         }
 
-        public Map<String, Object> doSomethingInSMS(String cmdName, Object value)
+        public Dictionary<String, Object> doSomethingInSMS(String cmdName, Object value)
         {
-            Map<String, Object> args = ((Map<String, Object>)value);
-            Map<String, Object> vals = new HashMap<>();
-            if ("move_to".equals(cmdName))
+            Dictionary<String, Object> args = ((Dictionary<String, Object>)value);
+            Dictionary<String, Object> vals = new Dictionary<string, object>();
+            if ("move_to".Equals(cmdName))
             {
 
-                String objname = (String)args.get("name_of_thing");
-                int x = (int)args.get("x");
-                int y = (int)args.get("y");
+                String objname = (String)args["name_of_thing"];
+                int x = (int)args["x"];
+                int y = (int)args["y"];
 
                 SimpleObject obj = findObjectByName(objname);
 
@@ -431,17 +427,17 @@ namespace Blocksworld
                 obj.pos.y = y;
 
             }
-            else if ("get_obj_pos".equals(cmdName))
+            else if ("get_obj_pos".Equals(cmdName))
             {
-                String objname = (String)args.get("name_of_thing");
-                LinkedList<String> objs = new LinkedList(Arrays.asList("h", "j", "b1", "b2", "b3", "b4", "v"));
-                if (objs.contains(objname))
+                String objname = (String)args["name_of_thing"];
+                List<String> objs = new List<String>() { "h", "j", "b1", "b2", "b3", "b4", "v" };
+                if (objs.Contains(objname))
                 {
                     SimpleObject obj = findObjectByName(objname);
                     int x = obj.pos.x;
                     int y = obj.pos.y;
-                    vals.put(objname + "x", x);
-                    vals.put(objname + "y", y);
+                    vals.Add(objname + "x", x);
+                    vals.Add(objname + "y", y);
                 }
 
             }
@@ -465,11 +461,11 @@ namespace Blocksworld
          * @return sensor status, all items, plus list of all actions which completed this clock cycle
          */
 
-        public Map<String, Object> stepPhysicalWorld(String seqid, List<String> actions)
+        public Dictionary<String, Object> stepPhysicalWorld(String seqid, List<String> actions)
         {
             doActions(actions);
 
-            if (clock % randomBlockMotionPeriod == 0 && clock > randomBlockMotionAfter && hand1.graspedObject == null)
+            if (clock() % randomBlockMotionPeriod == 0 && clock() > randomBlockMotionAfter && hand1.graspedObject == null)
             {
                 ungrasp(hand1);
                 randomlyMoveBlocks();
@@ -497,7 +493,6 @@ namespace Blocksworld
             List objlocs = getDebugState();
             sensors.setDebugInfo(objlocs);
 
-            SensorState sensors = getSensorState();
             Map<String, Object> stateMap = sensors.toMap();
             if (com.jleela.brain.BrainServer.crossbar != null)
             {
@@ -1069,21 +1064,21 @@ namespace Blocksworld
         public void limitForward(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
-            Vec2 dest = pos.add(FORWARD);
+            Vec2 dest = pos.Add(FORWARD);
             limitMoveTo(obj, dest);
         }
 
         public void limitBack(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
-            Vec2 dest = pos.add(BACK);
+            Vec2 dest = pos.Add(BACK);
             limitMoveTo(obj, dest);
         }
 
         public void limitRight(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
-            Vec2 dest = pos.add(RIGHT);
+            Vec2 dest = pos.Add(RIGHT);
             limitMoveTo(obj, dest);
 
         }
@@ -1091,7 +1086,7 @@ namespace Blocksworld
         public void limitLeft(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
-            Vec2 dest = pos.add(LEFT);
+            Vec2 dest = pos.Add(LEFT);
             limitMoveTo(obj, dest);
         }
 
@@ -1129,14 +1124,14 @@ namespace Blocksworld
             h.grasp(clock);
             ArrayList<SimpleObject> touched = new ArrayList<>();
 
-            if (front != null) touched.add(front);
-            if (back != null) touched.add(back);
-            if (left != null) touched.add(left);
-            if (right != null) touched.add(right);
+            if (front != null) touched.Add(front);
+            if (back != null) touched.Add(back);
+            if (left != null) touched.Add(left);
+            if (right != null) touched.Add(right);
 
             if (touched.size() > 0)
             {
-                h.graspedObject = touched.get(rand.nextInt(touched.size()));
+                h.graspedObject = touched.get(rand.Next(touched.size()));
             }
 
         }
@@ -1236,7 +1231,7 @@ namespace Blocksworld
         void moveHand(HandObject h, Vec2 delta)
         {
             Vec2 hpos = h.getPosition().copy();
-            Vec2 hdest = hpos.add(delta);
+            Vec2 hdest = hpos.Add(delta);
 
             // Is hand grasping a block? See if we can move the hand and block
             // to the desired destination.
@@ -1247,7 +1242,7 @@ namespace Blocksworld
                 // save the grasped object start position
                 Vec2 gpos = g.getPosition().copy();
                 // grasped object target positino
-                Vec2 gdest = gpos.add(delta);
+                Vec2 gdest = gpos.Add(delta);
 
                 // logger.info(clock+": "+h+" grasping g at "+gpos +" moving to "+gdest);
 
@@ -1285,8 +1280,8 @@ namespace Blocksworld
             }
 
             ArrayList<Integer> pos = new ArrayList<>();
-            pos.add(h.getPosition().x);
-            pos.add(h.getPosition().y);
+            pos.Add(h.getPosition().x);
+            pos.Add(h.getPosition().y);
             if (handPositions.containsKey(pos))
             {
                 handPositions.put(pos, handPositions.get(pos) + 1);
@@ -1327,25 +1322,25 @@ namespace Blocksworld
                         if (front != null)
                         {
                             graspf(h);
-                            reflexActions.add("grasp");
+                            reflexActions.Add("grasp");
                             h.reflexGrasp = true;
                         }
                         else if (left != null)
                         {
                             graspl(h);
-                            reflexActions.add("grasp");
+                            reflexActions.Add("grasp");
                             h.reflexGrasp = true;
                         }
                         else if (right != null)
                         {
                             graspr(h);
-                            reflexActions.add("grasp");
+                            reflexActions.Add("grasp");
                             h.reflexGrasp = true;
                         }
                         else if (back != null)
                         {
                             graspb(h);
-                            reflexActions.add("grasp");
+                            reflexActions.Add("grasp");
                             h.reflexGrasp = true;
                         }
                     }
@@ -1361,21 +1356,21 @@ namespace Blocksworld
         public void forward(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
-            Vec2 dest = pos.add(FORWARD);
+            Vec2 dest = pos.Add(FORWARD);
             moveTo(obj, dest);
         }
 
         public void back(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
-            Vec2 dest = pos.add(BACK);
+            Vec2 dest = pos.Add(BACK);
             moveTo(obj, dest);
         }
 
         public void right(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
-            Vec2 dest = pos.add(RIGHT);
+            Vec2 dest = pos.Add(RIGHT);
             moveTo(obj, dest);
 
         }
@@ -1383,7 +1378,7 @@ namespace Blocksworld
         public void left(SimpleObject obj)
         {
             Vec2 pos = obj.getPosition();
-            Vec2 dest = pos.add(LEFT);
+            Vec2 dest = pos.Add(LEFT);
             moveTo(obj, dest);
         }
 
@@ -1450,30 +1445,30 @@ namespace Blocksworld
             return JSONValue.toJSONString(ss.items);
         }
 
-        public List getDebugState()
+        public List<Dictionary<String,Object>> getDebugState()
         {
-            LinkedList<SimpleObject> objs = new LinkedList(Arrays.asList(hand1, hand2, eye));
-            if (enableBlock1) { objs.add(block1); }
-            if (enableBlock2) { objs.add(block2); }
-            if (enableBlock3) { objs.add(block3); }
-            if (enableBlock4) { objs.add(block4); }
-            ArrayList val = new ArrayList();
-            for (SimpleObject obj : objs)
+            List<SimpleObject> objs = new List<SimpleObject>() { hand1, hand2, eye };
+            if (enableBlock1) { objs.Add(block1); }
+            if (enableBlock2) { objs.Add(block2); }
+            if (enableBlock3) { objs.Add(block3); }
+            if (enableBlock4) { objs.Add(block4); }
+            List<Dictionary<String,Object>> val = new List<Dictionary<String,Object>>();
+            foreach (SimpleObject obj in objs)
             {
-                val.add(obj.toMap());
+                val.Add(obj.toMap());
             }
 
-            // add in eyepos, hand positions
+            // Add in eyepos, hand positions
             return val;
         }
 
         // Convert debug state to LinkedList<Map<String, Object>>
-        public LinkedList getDebugObjsList() { throw new RuntimeException("getDebugObjsList not defined"); }
+        public List<Dictionary<String,Object>> getDebugObjsList() { throw new Exception("getDebugObjsList not defined"); }
 
         // Returns a list of maps representing the physical object locations
-        public LinkedList objlocList()
+        public List<SimpleObject> objlocList()
         {
-            LinkedList physobjs = new LinkedList();
+            List<SimpleObject> physobjs = new List<SimpleObject>();
             for (int y = 0; y <= N_GRIDS; y++)
             {
                 for (int x = 0; x <= N_GRIDS; x++)
@@ -1485,7 +1480,7 @@ namespace Blocksworld
                     }
                     else
                     {
-                        physobjs.add(gridcell(obj));
+                        physobjs.Add(gridcell(obj));
                     }
                 }
             }
