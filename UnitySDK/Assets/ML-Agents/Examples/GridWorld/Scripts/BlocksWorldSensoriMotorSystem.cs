@@ -260,6 +260,8 @@ namespace Blocksworld
             block3.setLimit(0, 0, 6, 6);
             block4.setLimit(0, 0, 6, 6);
 
+	    initializeObjectPositions();
+
         }
 
 
@@ -325,9 +327,8 @@ namespace Blocksworld
         }
 
 
-        public void initializeObjects()
+        public void initializeObjectPositions()
         {
-
             placeBlocks();
             placeHands();
         }
@@ -337,11 +338,14 @@ namespace Blocksworld
             objects.Add(hand1);
             moveTo(hand1, 3, 3);
             if (enableHand2)
-            {
+	    {
                 objects.Add(hand2);
                 moveTo(hand2, 5, 5);
             }
-            else remove(hand2);
+            else
+	    {
+		remove(hand2);
+	    }
         }
 
         public void placeBlocks()

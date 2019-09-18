@@ -12,7 +12,20 @@
 # get_from_sms()
 # do_in_sms()
 # include standard modules
+import json
+from autobahn.asyncio.component import Component, run
+from math import ceil
+
+from autobahn.wamp.types import RegisterOptions
+
+import asyncio
+import ssl
+
+import sys
+
+from mlagents.envs import UnityEnvironment
 import argparse
+print (sys.argv)
 
 # initiate the parser
 parser = argparse.ArgumentParser(description='Leela Crossbar agent for Unity ML Agents worlds')
@@ -29,9 +42,6 @@ unity_world = None
 global debug
 debug = False
 
-global unity_interactive
-unity_interactive = False
-
 # check for --width
 if cmdline_args.world:
     print(f'using envs. width to {cmdline_args.world}')
@@ -40,25 +50,12 @@ if cmdline_args.world:
 if cmdline_args.debug:
     debug = True
 
-if cmdline_args.interactive:
-    unity_interactive = True
+
+
 
 print(f'Debug flag = {debug}')
 
-import json
-from autobahn.asyncio.component import Component, run
-from math import ceil
 
-from autobahn.wamp.types import RegisterOptions
-
-import asyncio
-import ssl
-
-import matplotlib.pyplot as plt
-import numpy as np
-import sys
-
-from mlagents.envs import UnityEnvironment
 
 print("Python version:")
 print(sys.version)
@@ -246,7 +243,7 @@ capabilities_string = """
 
 
 if __name__ == "__main__":
-    if (unity_interactive == True):
+    if ( cmdline_args.interactive == True):
         environment = UnityEnvironment(file_name=None)
     else:
         environment = UnityEnvironment(file_name=unity_world)

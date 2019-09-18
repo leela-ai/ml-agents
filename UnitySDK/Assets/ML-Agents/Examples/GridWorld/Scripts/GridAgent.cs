@@ -74,7 +74,14 @@ public class GridAgent : Agent
          */
 
         // -->>> grab block and hand locs and set tranforms <<<--
+        copyBlocksPositionsToUnity();
 
+
+
+    }
+
+    public void copyBlocksPositionsToUnity()
+    {
         Vec2 handpos = blocksworldSMS.hand1.getPosition();
         Vec2 eyepos = blocksworldSMS.eye.getPosition();
         Vec2 block1pos = blocksworldSMS.block1.getPosition();
@@ -82,19 +89,17 @@ public class GridAgent : Agent
         Vec2 block3pos = blocksworldSMS.block3.getPosition();
         Vec2 block4pos = blocksworldSMS.block4.getPosition();
 
+        float dx = -1.0f;
+        float dy = -1.0f;
+        transform.position = new Vector3(handpos.x + dx, 0, handpos.y + dy);
 
-	transform.position = new Vector3(handpos.x, 0, handpos.y);
-
-	// block1
-	academy.actorObjs[0].transform.position = new Vector3(block1pos.x, 0, block1pos.y);
+        // block1
+        academy.actorObjs[0].transform.position = new Vector3(block1pos.x + dx, 0, block1pos.y + dy);
 
         // block2
-	academy.actorObjs[1].transform.position = new Vector3(block2pos.x, 0, block2pos.y);
-
+        academy.actorObjs[1].transform.position = new Vector3(block2pos.x + dx, 0, block2pos.y + dy);
 
     }
-
-
 
     // to be implemented by the developer
     public override void AgentReset()
