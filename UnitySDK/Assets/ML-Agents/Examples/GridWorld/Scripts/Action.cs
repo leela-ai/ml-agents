@@ -48,7 +48,17 @@ namespace Blocksworld
 
         Type type;
 
-        String TypeName() { return type.ToString(); }
+        public String TypeName() { return type.ToString(); }
+
+        // Print the enum names and their int values out
+        public void printAllValues() {
+          foreach (Action.Type a in Enum.GetValues(typeof(Action.Type)))
+          {
+                int val = (int) a;
+                Console.WriteLine($"{a.ToString()}={val}");
+          }
+        }
+
 
         // Constructor
         public Action(Type type)

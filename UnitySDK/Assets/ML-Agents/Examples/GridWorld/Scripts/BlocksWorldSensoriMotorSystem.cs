@@ -487,10 +487,12 @@ namespace Blocksworld
          * This is the main method which causes the sensors in the world/sensor state to be updated
          *
          * @param actions list of primitive actions to perform
-         * @return sensor status, all items, plus list of all actions which completed this clock cycle
-         */
+         * 
+         * @return encoded string of sensor values  "NAME1=[0|1];NAME2=[0|1];..."
+         * e.g., "hp22=1;hp23=0;hp24=0;"
+         *          */
 
-        public Dictionary<String, Object> stepPhysicalWorld(String seqid, List<String> actions)
+        public String stepPhysicalWorld(String seqid, List<String> actions)
         {
             doActions(actions);
 
@@ -515,18 +517,18 @@ namespace Blocksworld
             // just return the list of primitive actions we were just
             // given, plus any reflex actions we executed
 
-            actions.AddRange(reflexActions);    
+            // actions.AddRange(reflexActions);    
 
-            sensors.setActions(actions);
-            sensors.setClock(clock());
-            List<Dictionary<String,Object>> objlocs = getDebugState();
-            sensors.setDebugInfo(objlocs);
+            // sensors.setActions(actions);
+            // sensors.setClock(clock());
+            // List<Dictionary<String,Object>> objlocs = getDebugState();
+            // sensors.setDebugInfo(objlocs);
 
-            Dictionary<String, Object> stateMap = sensors.toMap();
+            // Dictionary<String, Object> stateMap = sensors.toMap();
             
             reflexActions.Clear();
 
-            return stateMap;
+            return sensors.ToObservationString();
 
         }
 

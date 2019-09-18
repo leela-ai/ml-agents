@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Blocksworld
 {
@@ -126,13 +127,24 @@ namespace Blocksworld
             foreach (KeyValuePair<String,SensorInput> entry in items)
             {
                 SensorInput item = entry.Value;
-                itemSet.Add(entry.Key, item.value);
+                itemSet.Add(item.name, item.value);
             }
             obj.Add("items", itemSet);
             obj.Add("actions", actions);
             obj.Add("clock", clock);
             obj.Add("debuginfo", debugInfo);
             return obj;
+        }
+
+        public String ToObservationString()
+        {
+            StringBuilder b = new StringBuilder();
+            foreach (KeyValuePair<String, SensorInput> entry in items)
+            {
+                SensorInput item = entry.Value;
+                b.Append($"{item.name}={item.value};");
+            }
+            return b.ToString();
         }
 
 
