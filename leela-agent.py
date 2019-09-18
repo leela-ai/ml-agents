@@ -88,10 +88,8 @@ component = Component(
 @component.on_join
 def join(session, details):
     global this_session
-    global eye_pos
     print("joined {}".format(details))
     this_session = session
-    eye_pos = eyePos()
 
 @component.register(
     u"ai.leela.sms.step_world"
@@ -101,12 +99,15 @@ def step_world(actionsJS):
 
     if (len(actions) == 0):
         action = "nullaction"
-        integer_action = 0
     else:
         action = actions[0]
 
-    environment_state = environment.step(text_action=action)['GridWorldLearning'].text_observations[0]
-    response = construct_response_with_environment_state(environment_state, [action])
+    print('step_world action=', action)
+
+    environment_state = environment.step(text_action=action)['GridWorldLearning']
+    print('environment_state = ',environment_state)
+    text_obs = environment_state.text_observations[0]
+    response = construct_response_with_environment_state(text_obs, [action])
     return (json.dumps(response))
 
 # use environment.step(vector_action=None, text_action="handf")
@@ -143,11 +144,12 @@ def get_capabilities():
 #
 # return   a dict of {itemName1: v1, itemName2, v2, ...}
 def decode_text_observation_string(item_string):
+    print('item_string=', item_string)
     items = item_string[0:-1] # trim off trailing ';'
-    kv = item.split(";")
+    kv = items.split(";")
     # splits into ['hp11=0', 'hp12=1', 'hp34=0', 'tactr=1']
 
-    kvp = kv.map(lambda pair: pair.split('='), kv)
+    kvp = map(lambda pair: pair.split('='), kv)
     # now kvp = [['hp11', '0'], ['hp12', '1'], ['hp34', '0'], ['tactr', '1']]
 
     # make a dictionary from this list

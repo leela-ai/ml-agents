@@ -65,6 +65,8 @@ public class GridAgent : Agent
 
         // returns a string encoding sensors and values e.g., "hp11=0;hp21=1;hp31=0;..."
         sensorObservationsText = blocksworldSMS.stepPhysicalWorld("0", actions);
+        Console.WriteLine("sensorObsText:");
+        Console.WriteLine(sensorObservationsText);
 
         /*
          * Here we need to poke into blocksworld to get locations of the hand and the blocks
