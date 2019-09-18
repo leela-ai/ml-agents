@@ -8,14 +8,14 @@ namespace Blocksworld
     {
         public Dictionary<String, SensorInput> items = new Dictionary<String, SensorInput>();
         public List<String> actions = new List<String>();
-        public List<Dictionary<String,Object>> debugInfo = new List<Dictionary<String,Object>>();
+        public List<Dictionary<String, Object>> debugInfo = new List<Dictionary<String, Object>>();
         public long clock = 0;
 
         public SensorState()
         {
         }
 
-        public Dictionary<String,SensorInput> Items()
+        public Dictionary<String, SensorInput> Items()
         {
             return items;
         }
@@ -34,7 +34,7 @@ namespace Blocksworld
             actions = a;
         }
 
-        public void setDebugInfo(List<Dictionary<String,Object>> d)
+        public void setDebugInfo(List<Dictionary<String, Object>> d)
         {
             debugInfo = d;
         }
@@ -85,16 +85,20 @@ namespace Blocksworld
 
         public SensorInput setSensorValue(String name, bool val, long clock)
         {
-            SensorInput s = items[name];
-            if (s == null)
+
+            SensorInput s;
+            if (items.TryGetValue(name, out s))
+            {
+                //it's already in the dictionary
+            }
+            else
             {
                 s = new SensorInput(name, val);
                 items.Add(name, s);
             }
-            else
-            {
-                s.setValue(val, clock);
-            }
+
+            s.setValue(val, clock);
+
             return s;
         }
 
@@ -119,12 +123,12 @@ namespace Blocksworld
         }
 
 
-        public Dictionary<String,Object> toMap()
+        public Dictionary<String, Object> toMap()
         {
             Dictionary<String, Object> obj = new Dictionary<string, object>();
-            Dictionary<String,bool> itemSet = new Dictionary<string, bool>();
+            Dictionary<String, bool> itemSet = new Dictionary<string, bool>();
 
-            foreach (KeyValuePair<String,SensorInput> entry in items)
+            foreach (KeyValuePair<String, SensorInput> entry in items)
             {
                 SensorInput item = entry.Value;
                 itemSet.Add(item.name, item.value);

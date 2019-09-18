@@ -27,6 +27,7 @@ public class GridAgent : Agent
     public override void InitializeAgent()
     {
         academy = FindObjectOfType(typeof(GridAcademy)) as GridAcademy;
+        blocksworldSMS = new BlocksWorldSensoriMotorSystem();
     }
 
     public override void CollectObservations()
@@ -62,6 +63,7 @@ public class GridAgent : Agent
         Vector3 targetPos = transform.position;
         List<String> actions = new List<String>();
         actions.Add(textAction);
+        Debug.Log("AgentAction before step world blocksworld="+blocksworldSMS);
 
         // returns a string encoding sensors and values e.g., "hp11=0;hp21=1;hp31=0;..."
         sensorObservationsText = blocksworldSMS.stepPhysicalWorld("0", actions);

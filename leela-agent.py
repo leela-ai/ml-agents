@@ -19,6 +19,7 @@ parser = argparse.ArgumentParser(description='Leela Crossbar agent for Unity ML 
 
 parser.add_argument("-W", "--world", help="Choose a prebuilt Unity world to run from envs/ directory",)
 parser.add_argument("-d", "--debug", help="Enable debug printing", action="store_true")
+parser.add_argument("-I", "--interactive", help="Run Unity game interactively", action="store_true")
 
 cmdline_args = parser.parse_args()
 
@@ -28,6 +29,9 @@ unity_world = None
 global debug
 debug = False
 
+global unity_interactive
+unity_interactive = False
+
 # check for --width
 if cmdline_args.world:
     print(f'using envs. width to {cmdline_args.world}')
@@ -35,6 +39,9 @@ if cmdline_args.world:
 
 if cmdline_args.debug:
     debug = True
+
+if cmdline_args.interactive:
+    unity_interactive = True
 
 print(f'Debug flag = {debug}')
 
@@ -234,8 +241,10 @@ capabilities_string = """
 
 
 if __name__ == "__main__":
-   #environment = UnityEnvironment(file_name=None)
+    if (unity_interactive == True):
+        environment = UnityEnvironment(file_name=None)
+    else:
+        environment = UnityEnvironment(file_name=unity_world)
+    environment.reset(train_mode=False)
+    run([component])
 
-   environment = UnityEnvironment(file_name=unity_world)
-   environment.reset(train_mode=False)
-   run([component])
