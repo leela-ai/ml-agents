@@ -159,12 +159,17 @@ def decode_text_observation_string(item_string):
     kvp = map(lambda pair: pair.split('='), kv)
     # now kvp = [['hp11', '0'], ['hp12', '1'], ['hp34', '0'], ['tactr', '1']]
 
-    # make a dictionary from this list
+    # make a dictionary from this list, convert 0 and 1 into True and False for json encoding
     vals = {}
     for pair in kvp:
         itemname = pair[0]
         itemval = pair[1]
-        vals[itemname] = itemval
+        if (itemval == "1"):
+            json_bool_val = True
+        else:
+            json_bool_val = False
+            
+        vals[itemname] = json_bool_val
 
     return vals
 

@@ -146,7 +146,8 @@ namespace Blocksworld
             foreach (KeyValuePair<String, SensorInput> entry in items)
             {
                 SensorInput item = entry.Value;
-                b.Append($"{item.name}={item.value};");
+                string numeric_val = item.value ? "1" : "0";
+                b.Append($"{item.name}={numeric_val};");
             }
             return b.ToString();
         }
