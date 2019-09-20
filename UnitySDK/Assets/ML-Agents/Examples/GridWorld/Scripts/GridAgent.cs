@@ -89,8 +89,8 @@ public class GridAgent : Agent
         Vec2 block3pos = blocksworldSMS.block3.getPosition();
         Vec2 block4pos = blocksworldSMS.block4.getPosition();
 
-        float dx = -1.0f;
-        float dy = -1.0f;
+        float dx = 0.0f;
+        float dy = 0.0f;
         transform.position = new Vector3(handpos.x + dx, 0, handpos.y + dy);
 
         // block1

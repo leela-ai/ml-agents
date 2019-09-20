@@ -109,7 +109,7 @@ def step_world(actionsJS):
     print('step_world action=', action)
 
     environment_state = environment.step(text_action=action)['GridWorldLearning']
-    print('environment_state = ',environment_state)
+    #print('environment_state = ',environment_state)
     text_obs = environment_state.text_observations[0]
     response = construct_response_with_environment_state(text_obs, [action])
     return (json.dumps(response))
