@@ -837,7 +837,11 @@ namespace Blocksworld
             {
                 for (int j = miny; j <= maxy; j++)
                 {
-                    String nameForVisualSensor = $"vf{i}{j}";
+
+		    String ipad = i.ToString("D2"); // zero padded two digit int
+		    String jpad = j.ToString("D2"); // zero padded two digit int
+
+                    String nameForVisualSensor = $"vf{ipad}{jpad}";
                     // mapping from coarse visual field (i,j) to global field in which objects are positioned
                     // add eye x and y offset but correct for starting position coordinates for the visual Field
                     SimpleObject isThereAnObjAtPos = objectAtPosition((i + glancex - glanceMidX), (j + glancey - glanceMidY));
@@ -970,7 +974,9 @@ namespace Blocksworld
 
         public String nameForObjPos(SimpleObject obj, int x, int y)
         {
-            return $"{obj.name}p{x}{y}";
+	    String xpad = x.ToString("D2"); // zero padded two digit int
+	    String ypad = y.ToString("D2"); // zero padded two digit int
+            return $"{obj.name}p{xpad}{ypad}";
         }
 
         SimpleObject objectAtPosition(int x, int y)
