@@ -170,11 +170,11 @@ MonoBehaviour:
   resetParameters:
     resetParameters:
     - key: gridSize
-      value: 5
+      value: 7
     - key: numObstacles
       value: 1
     - key: numGoals
-      value: 0
+      value: 1
   actorObjs: []
   players: 
   trueAgent: {fileID: 858783320}
