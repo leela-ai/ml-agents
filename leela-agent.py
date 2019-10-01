@@ -106,7 +106,7 @@ def step_world(actionsJS):
     else:
         action = actions[0]
 
-    print('step_world action=', action)
+    #print('step_world action=', action)
 
     environment_state = environment.step(text_action=action)['GridWorldLearning']
     #print('environment_state = ',environment_state)
@@ -136,11 +136,62 @@ def do_something_in_sms(commandJS, paramsJS):
         return json.dumps(False)
 
 
+
+def construct_field_sensors(sensors,minx,maxx,miny,maxy):
+    for i in range  (minx, maxx + 1):
+        for j in range (miny,maxy + 1):
+                hpname = "hp%02d%02d" % (i,j)
+                vfname = "vf%02d%02d" % (i, j)
+                vpname = "vp%02d%02d" % (i, j)
+                sensors[hpname] = True
+                sensors[vfname] = True
+                sensors[vpname] = True
+
+def construct_foveal_shape_sensors (sensors,minx,maxx,miny,maxy):
+    for i in range  (minx, maxx + 1):
+        for j in range (miny,maxy + 1):
+                fvsname1 = "fvs%d%d.circle" % (i, j)
+                sensors[fvsname1] = True
+                fvsname2 = "fvs%d%d.triangle" % (i, j)
+                sensors[fvsname2] = True
+                fvsname3 = "fvs%d%d.square" % (i, j)
+                sensors[fvsname3] = True
+
+def construct_foveal_sensors (sensors,minx,maxx,miny,maxy):
+    for i in range  (minx, maxx + 1):
+        for j in range (miny,maxy + 1):
+            for k in range (0,16):
+                fvname1 = "fov%d%d.%d" % (i,j,k)
+                sensors[fvname1] = True
+
+
+def construct_sensors(minx,maxx,miny,maxy):
+    sensors = {}
+    construct_field_sensors(sensors,minx,maxx,miny,maxy)
+    construct_foveal_shape_sensors(sensors,1,3,1,3)
+    construct_foveal_sensors(sensors,1,3,1,3)
+    return sensors
+
+gridsize = 12
+
+
+def usableActionNames():
+    return ["nullaction","handl","handr","handf","handb","grasp","ungrasp","eyel","eyer","eyef","eyeb"]
+
 @component.register(
     u"ai.leela.sms.get_capabilities"
 )
+
 def get_capabilities():
-    return capabilities_string    
+    c = {}
+    c["sensors"] = {}
+    sensors = construct_sensors(0,gridsize,0,gridsize)
+    c["sensors"]["items"] =  sensors
+    c["sensors"]["actions"] = usableActionNames()
+    return json.dumps(c)
+
+#def get_capabilities():
+#    return capabilities_string
 
 
 # observation_vector is an encoded string that has sensor names mapped to boolean values,  name1=val1;name2=val2;...
@@ -148,7 +199,7 @@ def get_capabilities():
 #
 # return   a dict of {itemName1: v1, itemName2, v2, ...}
 def decode_text_observation_string(item_string):
-    print('item_string=', item_string)
+    #print('item_string=', item_string)
     items = item_string[0:-1] # trim off trailing ';'
     kv = items.split(";")
     # splits into ['hp11=0', 'hp12=1', 'hp34=0', 'tactr=1']

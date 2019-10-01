@@ -28,6 +28,9 @@ public class GridAgent : Agent
     {
         academy = FindObjectOfType(typeof(GridAcademy)) as GridAcademy;
         blocksworldSMS = new BlocksWorldSensoriMotorSystem();
+
+
+       
     }
 
     public override void CollectObservations()
@@ -93,11 +96,17 @@ public class GridAgent : Agent
         float dy = 0.0f;
         transform.position = new Vector3(handpos.x + dx, 0, handpos.y + dy);
 
+        GameObject block1 = academy.actorObjs[0];
         // block1
-        academy.actorObjs[0].transform.position = new Vector3(block1pos.x + dx, 0, block1pos.y + dy);
+        block1.transform.position = new Vector3(block1pos.x + dx, 0, block1pos.y + dy);
+        block1.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
 
-        // block2
-        academy.actorObjs[1].transform.position = new Vector3(block2pos.x + dx, 0, block2pos.y + dy);
+        GameObject block2 = academy.actorObjs[1];
+        block2.transform.position = new Vector3(block2pos.x + dx, 0, block2pos.y + dy);
+        block2.transform.localScale = new Vector3(0.75f,0.75f,0.75f);        
+
+
+
 
     }
 

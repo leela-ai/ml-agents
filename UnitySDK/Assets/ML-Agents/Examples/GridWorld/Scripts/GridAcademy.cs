@@ -92,7 +92,7 @@ public class GridAcademy : Academy
         {
             DestroyImmediate(actor);
         }
-        
+
         SetEnvironment();
 
         actorObjs.Clear();
@@ -104,8 +104,8 @@ public class GridAcademy : Academy
         }
         int[] numbersA = Enumerable.ToArray(numbers);
 
-  
-   for (int i = 0; i < players.Length; i++)
+
+        for (int i = 0; i < players.Length; i++)
         {
             int x = (numbersA[i]) / gridSize;
             int y = (numbersA[i]) % gridSize;
@@ -114,11 +114,11 @@ public class GridAcademy : Academy
             actorObjs.Add(actorObj);
         }
 
-        
+
         int x_a = (numbersA[players.Length]) / gridSize;
         int y_a = (numbersA[players.Length]) % gridSize;
         trueAgent.transform.position = new Vector3(x_a, -0.25f, y_a);
-     }
+    }
 
     public override void AcademyStep()
     {
