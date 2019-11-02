@@ -52,18 +52,18 @@ namespace Blocksworld
         long graspReflexEnabledBefore;
         double graspReflexProbability = 0;
 
-        void readGridLimits() {
+        void readGridLimits(int gridsize) {
             
             handMinX = 1;
             handMinY = 1;
-            handMaxX = 5;
-            handMaxY = 5;
+            handMaxX = gridsize;
+            handMaxY = gridsize;
             
             // The coarse visual field system ranges from 1 to 5 in x and y
             visualFieldMinX = 1;
             visualFieldMinY = 1;
-            visualFieldMaxX = 5;
-            visualFieldMaxY = 5;
+            visualFieldMaxX = Math.Min(7,gridsize);
+            visualFieldMaxY = Math.Min(7,gridsize);
             
             // The glance field ranges from 0 to 4 in x and y
             glanceFieldMinX = 0;
@@ -234,11 +234,13 @@ namespace Blocksworld
 
         // Constructor sets up objects and adds them to the objects list
 
-        public BlocksWorldSensoriMotorSystem()
+        public BlocksWorldSensoriMotorSystem(int gridsize)
         {
 
             readConfigParams();
-            readGridLimits();
+            readGridLimits(gridsize);
+
+
 
             block1 = new SimpleObject(this, "b1", colors[PINK], TEXTURE_0, "circle", 0, 0); // 
             block2 = new SimpleObject(this, "b2", colors[YELLOW], TEXTURE_1, "triangle", 0, 0);
@@ -255,12 +257,12 @@ namespace Blocksworld
             hand2.setLimit(handPropField.minX, handPropField.minY, handPropField.maxX, handPropField.maxY);
 
             // Blocks are in the global coordinate system which spans from 0 to 6
-            block1.setLimit(0, 0, 6, 6);
-            block2.setLimit(0, 0, 6, 6);
-            block3.setLimit(0, 0, 6, 6);
-            block4.setLimit(0, 0, 6, 6);
+            block1.setLimit(0, 0, gridsize + 1, gridsize + 1);
+            block2.setLimit(0, 0, gridsize + 1, gridsize + 1);
+            block3.setLimit(0, 0, gridsize + 1, gridsize + 1);
+            block4.setLimit(0, 0, gridsize + 1, gridsize + 1);
 
-	    initializeObjectPositions();
+            initializeObjectPositions();
 
         }
 

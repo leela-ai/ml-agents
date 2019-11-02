@@ -70,15 +70,15 @@ public class GridAcademy : Academy
 
         players = playersList.ToArray();
 
-        plane.transform.localScale = new Vector3(gridSize / 10.0f, 1f, gridSize / 10.0f);
+        plane.transform.localScale = new Vector3((gridSize+4) / 10.0f, 1f, (gridSize+4) / 10.0f);
         plane.transform.position = new Vector3((gridSize - 1) / 2f, -0.5f, (gridSize - 1) / 2f);
-        sN.transform.localScale = new Vector3(1, 1, gridSize + 2);
+        sN.transform.localScale = new Vector3(1, 1, gridSize + 4);
         sS.transform.localScale = new Vector3(1, 1, gridSize + 2);
-        sN.transform.position = new Vector3((gridSize - 1) / 2f, 0.0f, gridSize);
+        sN.transform.position = new Vector3((gridSize - 1) / 2f, 0.0f, gridSize+2);
         sS.transform.position = new Vector3((gridSize - 1) / 2f, 0.0f, -1);
-        sE.transform.localScale = new Vector3(1, 1, gridSize + 2);
+        sE.transform.localScale = new Vector3(1, 1, gridSize + 4);
         sW.transform.localScale = new Vector3(1, 1, gridSize + 2);
-        sE.transform.position = new Vector3(gridSize, 0.0f, (gridSize - 1) / 2f);
+        sE.transform.position = new Vector3(gridSize+2, 0.0f, (gridSize - 1) / 2f);
         sW.transform.position = new Vector3(-1, 0.0f, (gridSize - 1) / 2f);
 
         agentCam.orthographicSize = (gridSize) / 2f;

@@ -27,7 +27,7 @@ public class GridAgent : Agent
     public override void InitializeAgent()
     {
         academy = FindObjectOfType(typeof(GridAcademy)) as GridAcademy;
-        blocksworldSMS = new BlocksWorldSensoriMotorSystem();
+        blocksworldSMS = new BlocksWorldSensoriMotorSystem(academy.gridSize);
 
 
        
