@@ -20,7 +20,7 @@ The .idea directory has the project all set up, but the vent directory is not ch
 
 You need Python 3.6 installed, and "pip install ml-agents". This can be done from PyCharm ->  Preferences -> Project Interpreter menu: it will create a virtual env automatically, and you can then select ml-agents package to install. 
 
-![pycharm-preferences](/Users/hminsky/PycharmProjects/ml-agents/doc-images/pycharm-preferences.png)
+![pycharm-preferences](doc-images/pycharm-preferences.png)
 
 See [docs/Installation.md](docs/Installation.md) 
 
@@ -30,11 +30,11 @@ See [docs/Installation.md](docs/Installation.md)
 
 
 
-![unity-build](/Users/hminsky/PycharmProjects/ml-agents/doc-images/unity-build.png)
+![unity-build](doc-images/unity-build.png)
 
 
 
-![build-save](/Users/hminsky/PycharmProjects/ml-agents/doc-images/build-save.png)
+![build-save](doc-images/build-save.png)
 
 ## /leela-agent.py WAMP bridge
 
