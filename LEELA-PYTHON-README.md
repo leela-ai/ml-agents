@@ -12,11 +12,11 @@ ml-agents directory contains a subdir called UnitySDK which is where the Unity p
 
 There's python code in the ml-agents directory which talks to the Unity/C# ML-Agents framework via sockets with some protocol we don't know about. 
 
-## PyCharm Project / create vent with Python 3.6
+## PyCharm Project / create venv with Python 3.6
 
 We've been using PyCharm, a python IDE from JetBrains, to debug and run python with. It's nice because it has a GUI to set up a python virtualenv, and install any needed libraries.
 
-The .idea directory has the project all set up, but the vent directory is not checked in, so you need to create it. 
+The .idea directory has the project all set up, but the Python VirtualEnv venv directory is not checked in, so you need to create it.  PyCharm will create it automatically, it can build virtual envs, but Python 3.6 has to be installed someplace on the Mac. 
 
 You need Python 3.6 installed, and "pip install ml-agents". This can be done from PyCharm ->  Preferences -> Project Interpreter menu: it will create a virtual env automatically, and you can then select ml-agents package to install. 
 
