@@ -61,15 +61,16 @@ public class GridAcademy : Academy
 
         List<int> playersList = new List<int>();
 
+        for (int i = 0; i < (int)resetParameters["numGoals"]; i++)
+        {
+            playersList.Add(1);
+        }
+
         for (int i = 0; i < (int)resetParameters["numObstacles"]; i++)
         {
             playersList.Add(2);
         }
 
-        for (int i = 0; i < (int)resetParameters["numGoals"]; i++)
-        {
-            playersList.Add(1);
-        }
 
         players = playersList.ToArray();
 
