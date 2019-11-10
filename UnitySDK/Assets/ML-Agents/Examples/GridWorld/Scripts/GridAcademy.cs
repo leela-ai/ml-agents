@@ -39,7 +39,7 @@ public class GridAcademy : Academy
         gridSize = (int)resetParameters["gridSize"];
         cam = camObject.GetComponent<Camera>();
 
-        objects = new GameObject[] { agentPref, block1, block2 };
+        objects = new GameObject[] { agentPref, block1, block2, block3, block4 };
 
         agentCam = GameObject.Find("agentCam").GetComponent<Camera>();
 
