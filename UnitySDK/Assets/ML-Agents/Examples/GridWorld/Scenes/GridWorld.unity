@@ -170,7 +170,7 @@ MonoBehaviour:
   resetParameters:
     resetParameters:
     - key: gridSize
-      value: 11
+      value: 5
     - key: numObstacles
       value: 1
     - key: numGoals
