@@ -4,7 +4,6 @@ using MLAgents;
 using System.Collections.Generic;
 using Blocksworld;
 
-using System.Collections.Generic;
 using System.Text;
 
 
@@ -150,15 +149,14 @@ public class GridAgent : Agent
         Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
         Vec2 block1pos = makePositionVector(objlocs.getByName("b1"));
         Vec2 block2pos = makePositionVector(objlocs.getByName("b2"));
-        Vec2 block3pos = new Vec2(100,100);
-        Vec2 block4pos = new Vec2(100,100);
+        Vec2 block3pos = makePositionVector(objlocs.getByName("b3"));
+	Vec2 block4pos = makePositionVector(objlocs.getByName("b4"));
 
         float dx = 0.0f;
         float dy = 0.0f;
         transform.position = new Vector3(handpos.x + dx, 0, handpos.y + dy);
 
         GameObject block1 = academy.actorObjs[0];
-        // block1
         block1.transform.position = new Vector3(block1pos.x + dx, 0, block1pos.y + dy);
         block1.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
 
@@ -166,7 +164,13 @@ public class GridAgent : Agent
         block2.transform.position = new Vector3(block2pos.x + dx, 0, block2pos.y + dy);
         block2.transform.localScale = new Vector3(0.75f,0.75f,0.75f);        
 
+        GameObject block3 = academy.actorObjs[2];
+        block3.transform.position = new Vector3(block3pos.x + dx, 0, block3pos.y + dy);
+        block3.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
 
+        GameObject block4 = academy.actorObjs[3];
+        block4.transform.position = new Vector3(block4pos.x + dx, 0, block4pos.y + dy);
+        block4.transform.localScale = new Vector3(0.75f,0.75f,0.75f);        
 
 
     }

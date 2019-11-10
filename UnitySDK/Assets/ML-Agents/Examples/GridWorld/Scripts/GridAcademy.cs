@@ -20,8 +20,11 @@ public class GridAcademy : Academy
     Camera agentCam;
 
     public GameObject agentPref;
-    public GameObject goalPref;
-    public GameObject pitPref;
+    public GameObject block1;
+    public GameObject block2;
+    public GameObject block3;
+    public GameObject block4;
+
     GameObject[] objects;
 
     GameObject plane;
@@ -36,7 +39,7 @@ public class GridAcademy : Academy
         gridSize = (int)resetParameters["gridSize"];
         cam = camObject.GetComponent<Camera>();
 
-        objects = new GameObject[] { agentPref, goalPref, pitPref };
+        objects = new GameObject[] { agentPref, block1, block2 };
 
         agentCam = GameObject.Find("agentCam").GetComponent<Camera>();
 
