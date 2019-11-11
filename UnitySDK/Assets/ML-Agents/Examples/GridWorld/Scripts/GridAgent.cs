@@ -73,6 +73,13 @@ public class GridAgent : Agent
         public string name;
         public int x;
         public int y;
+
+	public ObjInfo(string _name, int _x , int _y)
+	{
+	    name = _name;
+	    x = _x;
+	    y = _y;
+	}
     }
 
     // convert {"name": "b2", "x": 5, "y": 5} to  a Vec2(5,5); 
@@ -104,7 +111,7 @@ public class GridAgent : Agent
                     return obj;
                 }
             }
-            throw new Exception("could not find any debuginfo objloc object named " + name);
+	    return new ObjInfo(name, -100, -100);
         }
 
         // Given JSON input:
@@ -133,60 +140,95 @@ public class GridAgent : Agent
 
         Vec2 handpos = makePositionVector(objlocs.getByName("h"));
         Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
-        Vec2 block1pos = makePositionVector(objlocs.getByName("b1"));
-        Vec2 block2pos = makePositionVector(objlocs.getByName("b2"));
-        Vec2 block3pos = makePositionVector(objlocs.getByName("b3"));
-	Vec2 block4pos = makePositionVector(objlocs.getByName("b4"));
-	Vec2 block5pos = makePositionVector(objlocs.getByName("b5"));
-	Vec2 block6pos = makePositionVector(objlocs.getByName("b6"));
-	Vec2 block7pos = makePositionVector(objlocs.getByName("b7"));
-	Vec2 block8pos = makePositionVector(objlocs.getByName("b8"));
-	Vec2 block9pos = makePositionVector(objlocs.getByName("b9"));
-	Vec2 block10pos = makePositionVector(objlocs.getByName("b10"));
 
+
+
+        // Move the robot agent itself
         float dx = 0.0f;
         float dy = 0.0f;
         transform.position = new Vector3(handpos.x + dx, 0, handpos.y + dy);
 
-        GameObject block1 = academy.actorObjs[0];
-        block1.transform.position = new Vector3(block1pos.x + dx, 0, block1pos.y + dy);
-        block1.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        /*(loop for i from 1 to 10 do
+                (insert (format "
+            Vec2 block%dpos = makePositionVector(objlocs.getByName(\"b%d\"));
+            GameObject block%d = academy.actorObjs[%d];
+            block%d.transform.position = new Vector3(block%dpos.x + dx, 0, block%dpos.y + dy);
+            block%d.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+            \n\n"  i i i (- i 1) i i i i)))*/
+        try {
 
-        GameObject block2 = academy.actorObjs[1];
-        block2.transform.position = new Vector3(block2pos.x + dx, 0, block2pos.y + dy);
-        block2.transform.localScale = new Vector3(0.75f,0.75f,0.75f);        
+	    Vec2 block1pos = makePositionVector(objlocs.getByName("b1"));
+	    GameObject block1 = academy.actorObjs[0];
+	    block1.transform.position = new Vector3(block1pos.x + dx, 0, block1pos.y + dy);
+	    block1.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
 
-        GameObject block3 = academy.actorObjs[2];
-        block3.transform.position = new Vector3(block3pos.x + dx, 0, block3pos.y + dy);
-        block3.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
 
-        GameObject block4 = academy.actorObjs[3];
-        block4.transform.position = new Vector3(block4pos.x + dx, 0, block4pos.y + dy);
-        block4.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+	    Vec2 block2pos = makePositionVector(objlocs.getByName("b2"));
+	    GameObject block2 = academy.actorObjs[1];
+	    block2.transform.position = new Vector3(block2pos.x + dx, 0, block2pos.y + dy);
+	    block2.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
 
-	GameObject block5 = academy.actorObjs[4];
-        block5.transform.position = new Vector3(block5pos.x + dx, 0, block5pos.y + dy);
-        block5.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
 
-        GameObject block6 = academy.actorObjs[5];
-        block6.transform.position = new Vector3(block6pos.x + dx, 0, block6pos.y + dy);
-        block6.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+	    Vec2 block3pos = makePositionVector(objlocs.getByName("b3"));
+	    GameObject block3 = academy.actorObjs[2];
+	    block3.transform.position = new Vector3(block3pos.x + dx, 0, block3pos.y + dy);
+	    block3.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
 
-        GameObject block7 = academy.actorObjs[6];
-        block7.transform.position = new Vector3(block7pos.x + dx, 0, block7pos.y + dy);
-        block7.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
 
-        GameObject block8 = academy.actorObjs[7];
-        block8.transform.position = new Vector3(block8pos.x + dx, 0, block8pos.y + dy);
-        block8.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+	    Vec2 block4pos = makePositionVector(objlocs.getByName("b4"));
+	    GameObject block4 = academy.actorObjs[3];
+	    block4.transform.position = new Vector3(block4pos.x + dx, 0, block4pos.y + dy);
+	    block4.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
 
-        GameObject block9 = academy.actorObjs[8];
-        block9.transform.position = new Vector3(block9pos.x + dx, 0, block9pos.y + dy);
-        block9.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
 
-        GameObject block10 = academy.actorObjs[9];
-        block10.transform.position = new Vector3(block10pos.x + dx, 0, block10pos.y + dy);
-        block10.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+	    Vec2 block5pos = makePositionVector(objlocs.getByName("b5"));
+	    GameObject block5 = academy.actorObjs[4];
+	    block5.transform.position = new Vector3(block5pos.x + dx, 0, block5pos.y + dy);
+	    block5.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
+
+
+	    Vec2 block6pos = makePositionVector(objlocs.getByName("b6"));
+	    GameObject block6 = academy.actorObjs[5];
+	    block6.transform.position = new Vector3(block6pos.x + dx, 0, block6pos.y + dy);
+	    block6.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
+
+
+	    Vec2 block7pos = makePositionVector(objlocs.getByName("b7"));
+	    GameObject block7 = academy.actorObjs[6];
+	    block7.transform.position = new Vector3(block7pos.x + dx, 0, block7pos.y + dy);
+	    block7.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
+
+
+	    Vec2 block8pos = makePositionVector(objlocs.getByName("b8"));
+	    GameObject block8 = academy.actorObjs[7];
+	    block8.transform.position = new Vector3(block8pos.x + dx, 0, block8pos.y + dy);
+	    block8.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
+
+
+	    Vec2 block9pos = makePositionVector(objlocs.getByName("b9"));
+	    GameObject block9 = academy.actorObjs[8];
+	    block9.transform.position = new Vector3(block9pos.x + dx, 0, block9pos.y + dy);
+	    block9.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
+
+
+	    Vec2 block10pos = makePositionVector(objlocs.getByName("b10"));
+	    GameObject block10 = academy.actorObjs[9];
+	    block10.transform.position = new Vector3(block10pos.x + dx, 0, block10pos.y + dy);
+	    block10.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        
+	} catch (Exception e) {
+            Console.WriteLine($"copyBlocksPositionsToUnity caught block pos error: '{e}'");
+	}
+
 
         textAction = "";
     }
