@@ -63,14 +63,14 @@ public class GridAgent : Agent
     {
         AddReward(-0.01f);
 
-
+        Debug.Log("vectorAction[len " + vectorAction.Length+"][0]: "+ vectorAction[0]);
         Vector3 targetPos = transform.position;
         List<String> actions = new List<String>();
         actions.Add(textAction);
 
         // returns a string encoding sensors and values e.g., "hp11=0;hp21=1;hp31=0;..."
         //sensorObservationsText = blocksworldSMS.stepPhysicalWorld("0", actions);
-        Debug.Log(textAction);
+        //Debug.Log(textAction);
 
         /*
          * Here we need to poke into blocksworld to get locations of the hand and the blocks
@@ -141,8 +141,14 @@ public class GridAgent : Agent
 
     public void copyBlocksPositionsToUnity(string textAction)
     {
+        if (textAction == "")
+        {
+            return;
+        }
+        
         ObjLocs objlocs = ObjLocs.CreateFromJSON(textAction);
-        Debug.Log("textAction=" + textAction);
+        
+       
    
 
         Vec2 handpos = makePositionVector(objlocs.getByName("h"));
@@ -150,7 +156,7 @@ public class GridAgent : Agent
         Vec2 block1pos = makePositionVector(objlocs.getByName("b1"));
         Vec2 block2pos = makePositionVector(objlocs.getByName("b2"));
         Vec2 block3pos = makePositionVector(objlocs.getByName("b3"));
-	Vec2 block4pos = makePositionVector(objlocs.getByName("b4"));
+	    Vec2 block4pos = makePositionVector(objlocs.getByName("b4"));
 
         float dx = 0.0f;
         float dy = 0.0f;
@@ -170,9 +176,9 @@ public class GridAgent : Agent
 
         GameObject block4 = academy.actorObjs[3];
         block4.transform.position = new Vector3(block4pos.x + dx, 0, block4pos.y + dy);
-        block4.transform.localScale = new Vector3(0.75f,0.75f,0.75f);        
+        block4.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
 
-
+        textAction = "";
     }
 
     // to be implemented by the developer
