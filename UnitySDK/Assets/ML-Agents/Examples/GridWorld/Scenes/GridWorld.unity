@@ -152,7 +152,8 @@ MonoBehaviour:
   broadcastHub:
     broadcastingBrains:
     - {fileID: 11400000, guid: 2c1d51b7167874f31beda0b0cf0af468, type: 2}
-    _brainsToControl: []
+    _brainsToControl:
+    - {fileID: 11400000, guid: 2c1d51b7167874f31beda0b0cf0af468, type: 2}
   maxSteps: 0
   trainingConfiguration:
     width: 84
@@ -169,11 +170,11 @@ MonoBehaviour:
   resetParameters:
     resetParameters:
     - key: gridSize
-      value: 5
+      value: 11
     - key: numObstacles
-      value: 3
+      value: 5
     - key: numGoals
-      value: 1
+      value: 5
   actorObjs: []
   players: 
   trueAgent: {fileID: 858783320}
@@ -182,8 +183,6 @@ MonoBehaviour:
   agentPref: {fileID: 1657514749044530, guid: 628960e910f094ad1909ecc88cc8016d, type: 3}
   block1: {fileID: 1811317785436014, guid: d13ee2db77b3a4dcc8664d2fe2a0f219, type: 3}
   block2: {fileID: 1508142483324970, guid: 1ec4e4e96e7514d45b7ebc3ba5a9a481, type: 3}
-  block3: {fileID: 1508142483324970, guid: 1ec4e4e96e7514d45b7ebc3ba5a9a481, type: 3}
-  block4: {fileID: 1508142483324970, guid: 1ec4e4e96e7514d45b7ebc3ba5a9a481, type: 3}
 --- !u!4 &2047664
 Transform:
   m_ObjectHideFlags: 0

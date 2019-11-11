@@ -12,6 +12,11 @@
 # get_from_sms()
 # do_in_sms()
 # include standard modules
+
+#from autobahn.asyncio.wamp import ApplicationSession, ApplicationRunner
+#from autobahn.wamp.types import RegisterOptions
+#from autobahn.asyncio.component import Component, run
+
 import json
 from autobahn.asyncio.component import Component, run
 from math import ceil
@@ -19,12 +24,16 @@ from math import ceil
 from autobahn.wamp.types import RegisterOptions
 
 import asyncio
-import ssl
+from os import environ
 
+from math import ceil
+import ssl
 import sys
 
 from mlagents.envs import UnityEnvironment
 import argparse
+
+
 print (sys.argv)
 
 # initiate the parser
@@ -103,154 +112,39 @@ def join(session, details):
     global this_session
     print("joined {}".format(details))
     this_session = session
+    session.subscribe(on_event, u'ai.leela.sms.render.json')
 
-@component.register(
-    u"ai.leela.sms.step_world"
-)
-def step_world(actionsJS):
-    actions = json.loads(actionsJS)
+def on_event(msg, details=None, wtf=None):
+    if debug:
+        print("Got event {}".format(msg))
+    step_world(msg)
 
-    if (len(actions) == 0):
-        action = "nullaction"
-    else:
-        action = actions[0]
 
+# We will get the debuginfo (contains object locations) from dashboard message, it looks like
+# [{'name': 'h', 'x': 2, 'y': 3, 'color': 'rgb(0,0,255)', 'shape': None, 'texture': '02', 'rotation': 0, 'grasping': True, 'graspedObject': None}, {'name': 'j', 'x': -100, 'y': -100, 'color': 'rgb(255,165,0)', 'shape': None, 'texture': '03', 'rotation': 0, 'grasping': False, 'graspedObject': None}, {'name': 'v', 'x': 1, 'y': 4, 'color': 'rgb(255,255,255)', 'shape': 'circle', 'texture': '00'}, {'name': 'b1', 'x': 1, 'y': 5, 'color': 'rgb(255,20,147)', 'shape': 'circle', 'texture': '00'}, {'name': 'b2', 'x': 5, 'y': 5, 'color': 'rgb(255,255,0)', 'shape': 'square', 'texture': '01'}]
+
+def step_world(info):
+    objlocs = info['debuginfo']
+    locs = {'objs': objlocs} # make a dict with just one key 'objs' that maps to a list of obj descriptior dicts, 'objs' => [ {'name': 'b1', 'x': 1, 'y': 5}, ... ]
     #print('step_world action=', action)
-
-    environment_state = environment.step(text_action=action)['GridWorldLearning']
-    #print('environment_state = ',environment_state)
-    text_obs = environment_state.text_observations[0]
-    response = construct_response_with_environment_state(text_obs, [action])
-    return (json.dumps(response))
-
-# use environment.step(vector_action=None, text_action="handf")
-
-
-@component.register(
-    u"ai.leela.sms.do_something_in_sms"
-)
-
-# commands supported are:
-# 'step_action'   {action: ACTION_NAME, param1: v1, param2: v2, ...}
-#
-def do_something_in_sms(commandJS, paramsJS):
-    what = json.loads(commandJS)
-    params = json.loads(paramsJS)
-    if (what == "step_action"):
-        action = params
-        event = controller.step(action)
-        return(json.dumps(event.metadata))
-    else:
-        print(f"do_something_in_sms: unsupported command {what}")
-        return json.dumps(False)
-
-
-
-def construct_field_sensors(sensors,minx,maxx,miny,maxy):
-    for i in range  (minx, maxx + 1):
-        for j in range (miny,maxy + 1):
-                hpname = "hp%02d%02d" % (i,j)
-                vfname = "vf%02d%02d" % (i, j)
-                vpname = "vp%02d%02d" % (i, j)
-                sensors[hpname] = True
-                sensors[vfname] = True
-                sensors[vpname] = True
-
-def construct_foveal_shape_sensors (sensors,minx,maxx,miny,maxy):
-    for i in range  (minx, maxx + 1):
-        for j in range (miny,maxy + 1):
-                fvsname1 = "fvs%d%d.circle" % (i, j)
-                sensors[fvsname1] = True
-                fvsname2 = "fvs%d%d.triangle" % (i, j)
-                sensors[fvsname2] = True
-                fvsname3 = "fvs%d%d.square" % (i, j)
-                sensors[fvsname3] = True
-
-def construct_foveal_sensors (sensors,minx,maxx,miny,maxy):
-    for i in range  (minx, maxx + 1):
-        for j in range (miny,maxy + 1):
-            for k in range (0,16):
-                fvname1 = "fov%d%d.%d" % (i,j,k)
-                sensors[fvname1] = True
-
-
-def construct_sensors(minx,maxx,miny,maxy):
-    sensors = {}
-    construct_field_sensors(sensors,minx,maxx,miny,maxy)
-    construct_foveal_shape_sensors(sensors,1,3,1,3)
-    construct_foveal_sensors(sensors,1,3,1,3)
-    return sensors
+    objlocs_string = json.dumps(locs) # convert back to serialized json string to pass into Unity as the 'action' string
+    environment_state = environment.step(text_action=objlocs_string)['GridWorldLearning']
 
 gridsize = 5
 
 
-def usableActionNames():
-    return ["nullaction","handl","handr","handf","handb","grasp","ungrasp","eyel","eyer","eyef","eyeb"]
-
-@component.register(
-    u"ai.leela.sms.get_capabilities"
-)
-
-def get_capabilities():
-    c = {}
-    c["sensors"] = {}
-    sensors = construct_sensors(1,gridsize,1,gridsize)
-    c["sensors"]["items"] =  sensors
-    c["sensors"]["actions"] = usableActionNames()
-    return json.dumps(c)
-
-#def get_capabilities():
-#    return capabilities_string
+#================================================================
 
 
-# observation_vector is an encoded string that has sensor names mapped to boolean values,  name1=val1;name2=val2;...
-# e.g., "hp11=0;hp12=1;hp34=0;tactr=1;..."
-#
-# return   a dict of {itemName1: v1, itemName2, v2, ...}
-def decode_text_observation_string(item_string):
-    #print('item_string=', item_string)
-    items = item_string[0:-1] # trim off trailing ';'
-    kv = items.split(";")
-    # splits into ['hp11=0', 'hp12=1', 'hp34=0', 'tactr=1']
+if __name__ == '__main__':
+    import six
 
-    kvp = map(lambda pair: pair.split('='), kv)
-    # now kvp = [['hp11', '0'], ['hp12', '1'], ['hp34', '0'], ['tactr', '1']]
-
-    # make a dictionary from this list, convert 0 and 1 into True and False for json encoding
-    vals = {}
-    for pair in kvp:
-        itemname = pair[0]
-        itemval = pair[1]
-        if (itemval == "1"):
-            json_bool_val = True
-        else:
-            json_bool_val = False
-            
-        vals[itemname] = json_bool_val
-
-    return vals
-
-def construct_response_with_environment_state(observation_vector,action):
-   global this_session
-   response = {}
-   #items is a dict of {itemName1: v1, itemName2, v2, ...}
-   items = decode_text_observation_string(observation_vector);
-   response['items'] = items
-   response['actions'] = action
-   # fixme : debuginfo wants a list of all object positions
-   #processed_objects = list(map(lambda obj: {'name':obj.name,'x': int(obj.pos.x),'y':int(obj.pos.y)},objects))
-   #response['debuginfo'] =  processed_objects
-   response['debuginfo'] =  []
-   this_session.publish("ai.leela.sms.render.json", response)
-   if debug:
-       print("Response",response)
-   return response
-
-if __name__ == "__main__":
     if ( cmdline_args.interactive == True):
         environment = UnityEnvironment(file_name=None)
     else:
         environment = UnityEnvironment(file_name=unity_world)
     environment.reset(train_mode=False)
-    run([component])
+
+    run(component)
+
 

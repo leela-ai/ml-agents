@@ -36,23 +36,6 @@ public class GridAgent : Agent
 
     public override void CollectObservations()
     {
-        // Numeric observations are the positions of the agent, goal and pit
-
-        AddVectorObs(gameObject.transform.position.x);
-        AddVectorObs(gameObject.transform.position.z);
-        // goal
-        AddVectorObs(academy.actorObjs[0].transform.position.x);
-        AddVectorObs(academy.actorObjs[0].transform.position.z);
-        // pit
-        AddVectorObs(academy.actorObjs[1].transform.position.x);
-        AddVectorObs(academy.actorObjs[1].transform.position.z);
-
-        /* we could add eye position vector here if we want as a vector obs */
-
-        AddVectorObs(currentAction);
-
-        SetTextObs(sensorObservationsText);
-
      
     }
    
@@ -63,7 +46,7 @@ public class GridAgent : Agent
     {
         AddReward(-0.01f);
 
-        Debug.Log("vectorAction[len " + vectorAction.Length+"][0]: "+ vectorAction[0]);
+        //Debug.Log("vectorAction[len " + vectorAction.Length+"][0]: "+ vectorAction[0]);
         Vector3 targetPos = transform.position;
         List<String> actions = new List<String>();
         actions.Add(textAction);
@@ -147,16 +130,19 @@ public class GridAgent : Agent
         }
         
         ObjLocs objlocs = ObjLocs.CreateFromJSON(textAction);
-        
-       
-   
 
         Vec2 handpos = makePositionVector(objlocs.getByName("h"));
         Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
         Vec2 block1pos = makePositionVector(objlocs.getByName("b1"));
         Vec2 block2pos = makePositionVector(objlocs.getByName("b2"));
         Vec2 block3pos = makePositionVector(objlocs.getByName("b3"));
-	    Vec2 block4pos = makePositionVector(objlocs.getByName("b4"));
+	Vec2 block4pos = makePositionVector(objlocs.getByName("b4"));
+	Vec2 block5pos = makePositionVector(objlocs.getByName("b5"));
+	Vec2 block6pos = makePositionVector(objlocs.getByName("b6"));
+	Vec2 block7pos = makePositionVector(objlocs.getByName("b7"));
+	Vec2 block8pos = makePositionVector(objlocs.getByName("b8"));
+	Vec2 block9pos = makePositionVector(objlocs.getByName("b9"));
+	Vec2 block10pos = makePositionVector(objlocs.getByName("b10"));
 
         float dx = 0.0f;
         float dy = 0.0f;
@@ -177,6 +163,30 @@ public class GridAgent : Agent
         GameObject block4 = academy.actorObjs[3];
         block4.transform.position = new Vector3(block4pos.x + dx, 0, block4pos.y + dy);
         block4.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+
+	GameObject block5 = academy.actorObjs[4];
+        block5.transform.position = new Vector3(block5pos.x + dx, 0, block5pos.y + dy);
+        block5.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+
+        GameObject block6 = academy.actorObjs[5];
+        block6.transform.position = new Vector3(block6pos.x + dx, 0, block6pos.y + dy);
+        block6.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+
+        GameObject block7 = academy.actorObjs[6];
+        block7.transform.position = new Vector3(block7pos.x + dx, 0, block7pos.y + dy);
+        block7.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+
+        GameObject block8 = academy.actorObjs[7];
+        block8.transform.position = new Vector3(block8pos.x + dx, 0, block8pos.y + dy);
+        block8.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+
+        GameObject block9 = academy.actorObjs[8];
+        block9.transform.position = new Vector3(block9pos.x + dx, 0, block9pos.y + dy);
+        block9.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
+
+        GameObject block10 = academy.actorObjs[9];
+        block10.transform.position = new Vector3(block10pos.x + dx, 0, block10pos.y + dy);
+        block10.transform.localScale = new Vector3(0.75f,0.75f,0.75f);
 
         textAction = "";
     }
