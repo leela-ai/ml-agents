@@ -119,10 +119,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4302184315941402}
     m_Modifications:
-    - target: {fileID: 1171114059613574, guid: b6d7c924d63712b438305733775b6a78, type: 3}
-      propertyPath: m_Name
-      value: Rock Type 3 Moveable
-      objectReference: {fileID: 0}
     - target: {fileID: 4689853619624674, guid: b6d7c924d63712b438305733775b6a78, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -166,6 +162,10 @@ PrefabInstance:
     - target: {fileID: 4689853619624674, guid: b6d7c924d63712b438305733775b6a78, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171114059613574, guid: b6d7c924d63712b438305733775b6a78, type: 3}
+      propertyPath: m_Name
+      value: Rock Type 3 Moveable
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 136689821727101354, guid: b6d7c924d63712b438305733775b6a78, type: 3}
