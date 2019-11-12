@@ -119,17 +119,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4266498611226432}
     m_Modifications:
-    - target: {fileID: 1197755350233558, guid: 451a16ff2ef7d184291c7de0a479a3e6, type: 3}
-      propertyPath: m_Name
-      value: Brick Solid Type 1 Moveable
-      objectReference: {fileID: 0}
     - target: {fileID: 4267069198628968, guid: 451a16ff2ef7d184291c7de0a479a3e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4267069198628968, guid: 451a16ff2ef7d184291c7de0a479a3e6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.446
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4267069198628968, guid: 451a16ff2ef7d184291c7de0a479a3e6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -169,7 +165,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4267069198628968, guid: 451a16ff2ef7d184291c7de0a479a3e6, type: 3}
       propertyPath: m_LocalScale.x
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4267069198628968, guid: 451a16ff2ef7d184291c7de0a479a3e6, type: 3}
       propertyPath: m_LocalScale.y
@@ -177,7 +173,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4267069198628968, guid: 451a16ff2ef7d184291c7de0a479a3e6, type: 3}
       propertyPath: m_LocalScale.z
-      value: 5
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1197755350233558, guid: 451a16ff2ef7d184291c7de0a479a3e6, type: 3}
+      propertyPath: m_Name
+      value: Brick Solid Type 1 Moveable
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 54958928928499346, guid: 451a16ff2ef7d184291c7de0a479a3e6, type: 3}
