@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7597764064304761917dd93afb775b18, type: 3}
+  m_Name: LivingRoom 2
+  m_EditorClassIdentifier: 
+  windowsRate: 2
+  floor: {fileID: 2100000, guid: adc3943b0701ce145888ccbf624bdef9, type: 2}
+  walls: {fileID: 2100000, guid: c0a5c087e428b4a49b054aad49f9ea82, type: 2}
+  ceiling: {fileID: 2100000, guid: 41634e024576b21408b0dbd3ba46e0db, type: 2}
+  column: {fileID: 2100000, guid: c0a5c087e428b4a49b054aad49f9ea82, type: 2}
+  possibleProps:
+  - props: {fileID: 11400000, guid: 0b9a1952be8f22f49ab7d3489116b86f, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: 5c40e7680a0638f45833bc4038949410, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: 4516327b7aec3a041842e3dd7d120bac, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: 8b5fda90cfbbefe438fabbaffd409ecd, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: cc6d92275e3f94747842bf01fd21ff20, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: e387e521a44f8824285178e63d25ca93, type: 2}
+    count: 1
+  maxRoomSize: 100
+  minRoomSize: 6
+  maxCountOfDoors: 4
+  placeOnlyOnce: 1

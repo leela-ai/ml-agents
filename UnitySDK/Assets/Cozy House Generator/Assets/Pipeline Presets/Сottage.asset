@@ -1,0 +1,232 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7890a5379d864b2c8925bec170588014, type: 3}
+  m_Name: "\u0421ottage"
+  m_EditorClassIdentifier: 
+  firstStepPipes:
+  - pipeId: 16
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 1
+      exceptRange: 1
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 15
+    isEnabled: 0
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 0
+      exceptFirstRange: 1
+      exceptLastRange: 1
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 1
+  - pipeId: 0
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 1
+    isEnabled: 0
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 2
+      useOn: 1
+      haveExceptionFloors: 0
+  - pipeId: 3
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 2
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 4
+    isEnabled: 1
+    useCount: 3
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 2
+    isEnabled: 1
+    useCount: 5
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 14
+    isEnabled: 0
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 1
+      useOn: 1
+      haveExceptionFloors: 0
+  - pipeId: 13
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 1
+      exceptLastRange: 1
+      exceptRange: 0
+      onlyRange: 1
+      useOn: 0
+      haveExceptionFloors: 1
+  - pipeId: 5
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 11
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 6
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 12
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  secoundStepPipes:
+  - pipeId: 9
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 0
+      onlyLastRange: 0
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 8
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 1
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 1
+      useOn: 0
+      haveExceptionFloors: 0
+  - pipeId: 7
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 1
+      onlyLastRange: 0
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 1
+      haveExceptionFloors: 0
+  - pipeId: 10
+    isEnabled: 1
+    useCount: 1
+    floors:
+      onlyFirstRange: 0
+      onlyLastRange: 0
+      exceptFirstRange: 0
+      exceptLastRange: 0
+      exceptRange: 0
+      onlyRange: 0
+      useOn: 0
+      haveExceptionFloors: 0

@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0d00dd1751f455a9b1cd0ab3006131e, type: 3}
+  m_Name: Table with chairs
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1295034246655472, guid: 20e9b19c392e3d5478e41312770f3c41, type: 3}
+  propsType: 4
+  lookAtForwardLocalPos: {x: 0, y: 0, z: 0}
+  lookAtForwardLocalRot: {x: 0, y: 0, z: 0, w: 1}
+  cloneLookAtForwardTarget: {fileID: 0}
+  rulesOfGeneration:
+  - isEnabled: 1
+    ruleName: Space around is free
+    lookAt: 1
+    forwardCellRequirements:
+      state: 1
+      forwardWall: 8
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    backwardCellRequirements:
+      state: 1
+      forwardWall: 0
+      backwardWall: 8
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    rightCellRequirements:
+      state: 1
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 8
+      leftWall: 0
+      propsThatCanBe: 0
+    leftCellRequirements:
+      state: 1
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 8
+      propsThatCanBe: 0
+    forwardRightCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    forwardLeftCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    backwardRightCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    backwardLeftCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    centralCellRequirements:
+      state: 3
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+  combineAfterInstantiate: 1
+  shadowCastingMode: 0

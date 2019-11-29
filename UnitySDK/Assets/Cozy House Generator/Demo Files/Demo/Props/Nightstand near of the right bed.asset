@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0d00dd1751f455a9b1cd0ab3006131e, type: 3}
+  m_Name: Nightstand near of the right bed
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 2896789582499955368, guid: 209cbfbac5fb3234db0733a0c0875f6c, type: 3}
+  propsType: 1024
+  lookAtForwardLocalPos: {x: 0.652999, y: 0, z: 0.6280007}
+  lookAtForwardLocalRot: {x: 0, y: 1, z: 0, w: 0.00000043312576}
+  cloneLookAtForwardTarget: {fileID: 0}
+  rulesOfGeneration:
+  - isEnabled: 1
+    ruleName: Snap to right bed
+    lookAt: 1
+    forwardCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    backwardCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: -1
+      rightWall: 5
+      leftWall: 0
+      propsThatCanBe: 256
+    rightCellRequirements:
+      state: 2
+      forwardWall: 5
+      backwardWall: 0
+      rightWall: 8
+      leftWall: 0
+      propsThatCanBe: 256
+    leftCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    forwardRightCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    forwardLeftCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    backwardRightCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    backwardLeftCellRequirements:
+      state: 0
+      forwardWall: 0
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 0
+      propsThatCanBe: 0
+    centralCellRequirements:
+      state: 3
+      forwardWall: 5
+      backwardWall: 0
+      rightWall: 0
+      leftWall: 8
+      propsThatCanBe: 0
+  combineAfterInstantiate: 0
+  shadowCastingMode: 0
