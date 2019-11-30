@@ -17,7 +17,7 @@ public class GridAcademy : Academy
 
     public GameObject camObject;
     Camera cam;
-    Camera agentCam;
+    public Camera agentCam;
 
     public GameObject agentPref;
     public GameObject block1;
@@ -86,7 +86,7 @@ public class GridAcademy : Academy
         sE.transform.position = new Vector3(gridSize+2, 0.0f, (gridSize ) / 2f);
         sW.transform.position = new Vector3(-1, 0.0f, (gridSize ) / 2f);
         */
-        agentCam.orthographicSize = (gridSize) / 2f;
+        agentCam.orthographicSize = 2f;
         agentCam.transform.position = new Vector3((gridSize - 1) / 2f, gridSize + 1f, (gridSize - 1) / 2f);
 
     }

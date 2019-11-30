@@ -139,7 +139,6 @@ public class GridAgent : Agent
         ObjLocs objlocs = ObjLocs.CreateFromJSON(textAction);
 
         Vec2 handpos = makePositionVector(objlocs.getByName("h"));
-        Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
 
 
 
@@ -155,7 +154,14 @@ public class GridAgent : Agent
             block%d.transform.position = new Vector3(block%dpos.x + dx, 0, block%dpos.y + dy);
             block%d.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
             \n\n"  i i i (- i 1) i i i i)))*/
-        try {
+
+
+        Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
+        academy.agentCam.transform.position = new Vector3(eyepos.x, 6f, eyepos.y);
+        Console.WriteLine($"eyepos set to  '{eyepos.x} {eyepos.y}'");
+
+        try
+        {
 
 
         List<String> blocknames = new List<String>() {
@@ -170,6 +176,7 @@ public class GridAgent : Agent
             //block.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
         }
 
+   
         
 	} catch (Exception e) {
             Console.WriteLine($"copyBlocksPositionsToUnity caught block pos error: '{e}'");
