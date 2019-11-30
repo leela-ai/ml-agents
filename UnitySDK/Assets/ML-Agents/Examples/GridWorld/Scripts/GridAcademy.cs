@@ -44,10 +44,12 @@ public class GridAcademy : Academy
         actorObjs = new List<GameObject>();
 
         plane = GameObject.Find("Plane");
+        /*
         sN = GameObject.Find("sN");
         sS = GameObject.Find("sS");
         sW = GameObject.Find("sW");
         sE = GameObject.Find("sE");
+        */
     }
 
     public void SetEnvironment()
@@ -74,6 +76,7 @@ public class GridAcademy : Academy
 
         plane.transform.localScale = new Vector3((gridSize+2) / 10.0f, 1f, (gridSize+2) / 10.0f);
         plane.transform.position = new Vector3((gridSize +2) / 2f, -0.5f, (gridSize+2) / 2f);
+        /*
         sN.transform.localScale = new Vector3(1, 1, gridSize + 3);
         sS.transform.localScale = new Vector3(1, 1, gridSize + 3);
         sN.transform.position = new Vector3((gridSize ) / 2f, 0.0f, gridSize+2);
@@ -82,7 +85,7 @@ public class GridAcademy : Academy
         sW.transform.localScale = new Vector3(1, 1, gridSize + 3);
         sE.transform.position = new Vector3(gridSize+2, 0.0f, (gridSize ) / 2f);
         sW.transform.position = new Vector3(-1, 0.0f, (gridSize ) / 2f);
-
+        */
         agentCam.orthographicSize = (gridSize) / 2f;
         agentCam.transform.position = new Vector3((gridSize - 1) / 2f, gridSize + 1f, (gridSize - 1) / 2f);
 

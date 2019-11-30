@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3086356795042215978}
   - component: {fileID: 3086356795042215977}
   m_Layer: 0
-  m_Name: Panel House With Custom Roof
+  m_Name: House Generator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3086356795042215988}
-  m_LocalRotation: {x: -0, y: -0.70710725, z: -0, w: -0.7071064}
-  m_LocalPosition: {x: 26, y: -7.7771265e-18, z: -8}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0000005, y: 1, z: 1.0000005}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -270, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3086356795042215977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda8ada33d901954ba389cd6c0c88940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 14503
+  seed: 14444
   builderType: 1
   cellPrefab: {fileID: 1737237329271098, guid: e7d94f929c830514f969cf00b26ffc9c, type: 3}
   internalDoorPrefab: {fileID: 9051138882549066669, guid: 3009872eeb26a1c47918509beed545ed,
@@ -53,9 +53,9 @@ MonoBehaviour:
   windowFramePrefab: {fileID: 3551015963297475060, guid: a690e610ca2461043a0145d9950de7b1,
     type: 3}
   lodCullingPercent: 5
-  size: 8
-  floorsCount: 6
-  hideCeiling: 0
+  size: 7
+  floorsCount: 1
+  hideCeiling: 1
   facadeMaterial: {fileID: 2100000, guid: dece58cfb3a706f47a6e62b33f3663c5, type: 2}
   facadeColumnMaterial: {fileID: 2100000, guid: 0d7f32004a56cc34a9ebfac20040f643,
     type: 2}
