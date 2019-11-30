@@ -158,7 +158,7 @@ public class GridAgent : Agent
 
         Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
         academy.agentCam.transform.position = new Vector3(eyepos.x, 6f, eyepos.y);
-        Console.WriteLine($"eyepos set to  '{eyepos.x} {eyepos.y}'");
+//        Console.WriteLine($"eyepos set to  '{eyepos.x} {eyepos.y}'");
 
         try
         {
