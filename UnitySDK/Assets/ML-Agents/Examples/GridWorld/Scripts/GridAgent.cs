@@ -157,9 +157,21 @@ public class GridAgent : Agent
 
 
         Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
-        academy.agentCam.transform.position = academy.trueAgent.transform.position; //new Vector3(eyepos.x, 6f, eyepos.y);
-        
-//        Console.WriteLine($"eyepos set to  '{eyepos.x} {eyepos.y}'");
+        // set the agent cam to follow the agent to get the agent's point of view in the view port
+        academy.agentCam.transform.position = academy.trueAgent.transform.position;
+        // used to be set to the eye position
+        //new Vector3(eyepos.x, 6f, eyepos.y);
+        // Console.WriteLine($"eyepos set to  '{eyepos.x} {eyepos.y}'");
+
+        Vec2 targetpos = makePositionVector(objlocs.getByName("toplevel_goal"));
+        if (
+
+                academy.targetObj != null)
+        {
+            academy.targetObj.transform.position = new Vector3(targetpos.x, 1f, targetpos.y);
+            //academy.targetObj.transform.position = new Vector3(5f, 1f, 5f);
+        }
+
 
         try
         {

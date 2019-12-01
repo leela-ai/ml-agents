@@ -13,6 +13,7 @@ public class GridAcademy : Academy
 
     public GameObject trueAgent;
 
+
     public int gridSize;
 
     public GameObject camObject;
@@ -22,6 +23,9 @@ public class GridAcademy : Academy
     public GameObject agentPref;
     public GameObject block1;
     public GameObject block2;
+    public GameObject targetPref;
+    public GameObject targetObj;
+    
 
     GameObject[] objects;
 
@@ -43,6 +47,12 @@ public class GridAcademy : Academy
 
         actorObjs = new List<GameObject>();
 
+        //target = GameObject.Find("Target");
+        targetObj = Instantiate(targetPref);
+        targetObj.transform.position = new Vector3(5f, 0.2f, 5f);
+        targetObj.transform.localScale += new Vector3(8f,8f,8f);
+
+
         plane = GameObject.Find("Plane");
         /*
         sN = GameObject.Find("sN");
@@ -54,15 +64,14 @@ public class GridAcademy : Academy
 
     public void SetEnvironment()
     {
-    /*    cam.transform.position = new Vector3(-((int)resetParameters["gridSize"] - 1) / 2f,
-                                             (int)resetParameters["gridSize"] * 1.25f,
-                                             -((int)resetParameters["gridSize"] - 1) / 2f);
-                                             */
-
-        cam.transform.position = new Vector3(((((int)resetParameters["gridSize"]-1) / 2f)+2f),
-                                            ((((int)resetParameters["gridSize"]) / 2f) + 2f),
-                                            ((((int)resetParameters["gridSize"]) / 2f)+2f));
-
+        /*    cam.transform.position = new Vector3(-((int)resetParameters["gridSize"] - 1) / 2f,
+                                                 (int)resetParameters["gridSize"] * 1.25f,
+                                                 -((int)resetParameters["gridSize"] - 1) / 2f);
+                                                 */
+        // This is the main camera. Set it about mid-way in the house
+        float thisPos = ((((int)resetParameters["gridSize"] - 1) / 2f) + 2f);
+        cam.transform.position = new Vector3(thisPos, thisPos, thisPos);
+        // set camera rotation so it's looking into the house from the back
         cam.transform.rotation = Quaternion.Euler(45, 180, 0);
 
         cam.orthographicSize = ((int)resetParameters["gridSize"] + 5f) / 2f;
@@ -123,14 +132,14 @@ public class GridAcademy : Academy
             int x = (numbersA[i]) / gridSize;
             int y = (numbersA[i]) % gridSize;
             GameObject actorObj = Instantiate(objects[players[i]]);
-            actorObj.transform.position = new Vector3(x, -0.25f, y);
+            actorObj.transform.position = new Vector3(x, 0f, y);
             actorObjs.Add(actorObj);
         }
 
 
         int x_a = (numbersA[players.Length]) / gridSize;
         int y_a = (numbersA[players.Length]) % gridSize;
-        trueAgent.transform.position = new Vector3(x_a, -0.25f, y_a);
+        trueAgent.transform.position = new Vector3(x_a, 0f, y_a);
     }
 
     public override void AcademyStep()
