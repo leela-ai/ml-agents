@@ -54,9 +54,17 @@ public class GridAcademy : Academy
 
     public void SetEnvironment()
     {
-        cam.transform.position = new Vector3(-((int)resetParameters["gridSize"] - 1) / 2f,
+    /*    cam.transform.position = new Vector3(-((int)resetParameters["gridSize"] - 1) / 2f,
                                              (int)resetParameters["gridSize"] * 1.25f,
                                              -((int)resetParameters["gridSize"] - 1) / 2f);
+                                             */
+
+        cam.transform.position = new Vector3(((((int)resetParameters["gridSize"]-1) / 2f)+2f),
+                                            ((((int)resetParameters["gridSize"]) / 2f) + 2f),
+                                            ((((int)resetParameters["gridSize"]) / 2f)+2f));
+
+        cam.transform.rotation = Quaternion.Euler(45, 180, 0);
+
         cam.orthographicSize = ((int)resetParameters["gridSize"] + 5f) / 2f;
 
         List<int> playersList = new List<int>();
