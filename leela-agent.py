@@ -30,6 +30,8 @@ from math import ceil
 import ssl
 import sys
 
+#For python 3.7.4
+#from mlagents.envs.environment import UnityEnvironment
 from mlagents.envs import UnityEnvironment
 import argparse
 
