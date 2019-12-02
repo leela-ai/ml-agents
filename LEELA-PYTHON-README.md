@@ -18,7 +18,7 @@ We've been using PyCharm, a python IDE from JetBrains, to debug and run python w
 
 The .idea directory has the project all set up, but the Python VirtualEnv venv directory is not checked in, so you need to create it.  PyCharm will create it automatically, it can build virtual envs, but Python 3.6 has to be installed someplace on the Mac. 
 
-You need Python 3.6 installed, and "pip install ml-agents". This can be done from PyCharm ->  Preferences -> Project Interpreter menu: it will create a virtual env automatically, and you can then select ml-agents package to install. 
+You need Python 3.6 installed, and "pip install mlagents". This can be done from PyCharm ->  Preferences -> Project Interpreter menu: it will create a virtual env automatically, and you can then select ml-agents package to install. 
 
 ![pycharm-preferences](doc-images/pycharm-preferences.png)
 
