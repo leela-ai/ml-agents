@@ -25,7 +25,7 @@ public class GridAcademy : Academy
     public GameObject block2;
     public GameObject targetPref;
     public GameObject targetObj;
-    
+
 
     GameObject[] objects;
 
@@ -69,12 +69,12 @@ public class GridAcademy : Academy
                                                  -((int)resetParameters["gridSize"] - 1) / 2f);
                                                  */
         // This is the main camera. Set it about mid-way in the house
-        float thisPos = ((((int)resetParameters["gridSize"] - 1) / 2f) + 2f);
-        cam.transform.position = new Vector3(thisPos, thisPos, thisPos);
+        //float thisPos = ((((int)resetParameters["gridSize"] - 1) / 2f) + 2f);
+        //cam.transform.position = new Vector3(thisPos, thisPos, thisPos);
         // set camera rotation so it's looking into the house from the back
-        cam.transform.rotation = Quaternion.Euler(45, 180, 0);
+        //cam.transform.rotation = Quaternion.Euler(45, 180, 0);
 
-        cam.orthographicSize = ((int)resetParameters["gridSize"] + 5f) / 2f;
+        //cam.orthographicSize = ((int)resetParameters["gridSize"] + 5f) / 2f;
 
         List<int> playersList = new List<int>();
 
