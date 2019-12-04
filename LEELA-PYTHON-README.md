@@ -1,16 +1,17 @@
 # Running Unity ML-Agents with Python "communicator" wrapper / wamp bridge
 
-## Github project: leela-ai/ml-agents
+## Github project: leela-ai/ml-agents (Currenty on cozy-home)
 
 There is a fork of the Unity ML-Agents project on github, at https://github.com/leela-ai/ml-agents
 
 You *MUST* be running Unity v2019.3.0a8 on OSX (no other versions will work).
 
+
 ml-agents directory contains a subdir called UnitySDK which is where the Unity project lives. We have modified one of the example games, called GridWorld, to match what Leela's Java grid-world SMS does. 
 
 There's python code in the ml-agents directory which talks to the Unity/C# ML-Agents framework via sockets with some protocol we don't know about. 
 
-## PyCharm Project / create venv with Python 3.6
+## PyCharm Project / create venv with Python 3.6.5 or 3.6.7
 
 We've been using PyCharm, a python IDE from JetBrains, to debug and run python with. It's nice because it has a GUI to set up a python virtualenv, and install any needed libraries.
 
@@ -20,7 +21,7 @@ You need Python 3.6.5 or 3.6.7 installed, This can be done from PyCharm ->  Pref
 ![pycharm-preferences](doc-images/pycharm-preferences.png)
 
 Then, manually install an local version of Unity "mlagents" python package.
-
+<
 % cd ml-agents-envs
 % pip3 install -e ./
 % cd ..
@@ -51,9 +52,11 @@ Then run from a shell:
 
 This will run in 'interactive mode' which means it will wait for you to press "Start" in a running Unity IDE to fire up the Unity GridWorld app
 
-or, if you've built a precompiled Unity GridWorld app, and put it into envs/GridWorld-11x11.app
+or, if you've built a precompiled Unity GridWorld app, and put it into envs/myhouse.app
 
-`python leela-agent.py -W GridWorld-11x11`
+`python leela-agent.py -W myhouse`
+
+(NOTE: You must go to a browser and connect to localhost:8080 to start jleela and send events to WAMP/ml-agents)
 
 
 
