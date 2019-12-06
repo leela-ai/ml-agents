@@ -166,15 +166,18 @@ public class GridAgent : Agent
         {
             _localRot = 0;
         }
-        //do animation of local rotation.
-        Quaternion newRotation = Quaternion.Euler(0, _localRot, 0);
-        //transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * 5);
-        transform.rotation = newRotation;
 
         // NOTE: In this gridworld, y is z, and z is y.
         transform.position = new Vector3(handpos.x, 0, handpos.y);
+        
 
-        /*(loop for i from 1 to 10 do
+		//do animation of local rotation.
+		Quaternion newRotation = Quaternion.Euler(0, _localRot, 0);
+		transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * 5);
+		//transform.rotation = newRotation;
+
+
+		/*(loop for i from 1 to 10 do
                 (insert (format "
             Vec2 block%dpos = makePositionVector(objlocs.getByName(\"b%d\"));
             GameObject block%d = academy.actorObjs[%d];
@@ -183,7 +186,7 @@ public class GridAgent : Agent
             \n\n"  i i i (- i 1) i i i i)))*/
 
 
-        Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
+		Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
         // set the agent cam to follow the agent to get the agent's point of view in the view port
         academy.agentCam.transform.position = academy.trueAgent.transform.position;
         // used to be set to the eye position
@@ -212,7 +215,7 @@ public class GridAgent : Agent
             string blockname = blocknames[i];
             Vec2 blockpos = makePositionVector(objlocs.getByName(blockname));
             GameObject block = academy.actorObjs[i];
-            block.transform.position = new Vector3(blockpos.x + dx, 0.25f, blockpos.y + dy);
+            block.transform.position = new Vector3(blockpos.x, 0.25f, blockpos.y);
             //block.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
         }
 
