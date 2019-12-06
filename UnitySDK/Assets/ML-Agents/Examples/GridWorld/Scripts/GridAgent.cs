@@ -9,6 +9,9 @@ using System.Text;
 
 public class GridAgent : Agent
 {
+    private float update;
+
+
     [Header("Specific to GridWorld")]
     private GridAcademy academy;
     public float timeBetweenDecisionsAtInference;
@@ -44,7 +47,7 @@ public class GridAgent : Agent
     // to be implemented by the developer
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        AddReward(-0.01f);
+        //AddReward(-0.01f);
 
         //Debug.Log("vectorAction[len " + vectorAction.Length+"][0]: "+ vectorAction[0]);
         Vector3 targetPos = transform.position;
@@ -62,9 +65,6 @@ public class GridAgent : Agent
 
         // -->>> grab block and hand locs and set tranforms <<<--
         copyBlocksPositionsToUnity(textAction);
-
-
-
     }
 
     [System.Serializable]
@@ -140,44 +140,45 @@ public class GridAgent : Agent
 
         Vec2 handpos = makePositionVector(objlocs.getByName("h"));
 
-
-
         // Move the robot agent itself
         Vector3 currentPos = transform.position;
         float dx = handpos.x - currentPos.x ;
-        float dy = handpos.y - currentPos.y ;
-        Debug.Log("Dx=" + dx.ToString());
-        Debug.Log("Dy=" + dy.ToString());
-        Debug.Log(currentPos);
-        Debug.Log(handpos);
+        // Remeber! Y is Z, Z is Y......god damn it.
+        float dy = handpos.y - currentPos.z ;
+        //Debug.Log("X: New, Curr: " + handpos.x.ToString() + "," + currentPos.x);
+        //Debug.Log("Y: New, Curr: " + handpos.y.ToString() + "," + currentPos.y);
+        Debug.Log(dx.ToString() + ":" + dy.ToString());
         int _localRot = 0;
-        if (dx>0) {
+        if (dx > 0 & dy == 0.0) {
             _localRot = 90;
         }
-        if (dx <0 )
+        if (dx < 0 & dy == 0.0)
         {
             _localRot = -90;
+            //Debug.Log("Turn Left");
         }
-        if (dy > 0)
-        {
-            _localRot = 180;
-        }
-        if (dy < 0)
+        if (dy > 0 & dx == 0.0)
         {
             _localRot = 0;
+           // Debug.Log("Turn Top");
         }
+        if (dy < 0 & dx == 0.0)
+        {
+            _localRot = 180;
+            //Debug.Log("Turn Bottom");
+        }
+        //do local rotation. Still need to animate.		
+        transform.rotation = Quaternion.Euler(0, _localRot, 0);
+        Debug.Log("Rot = " + _localRot.ToString());
 
         // NOTE: In this gridworld, y is z, and z is y.
         transform.position = new Vector3(handpos.x, 0, handpos.y);
-        
-
-		//do animation of local rotation.
-		Quaternion newRotation = Quaternion.Euler(0, _localRot, 0);
-		transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * 5);
-		//transform.rotation = newRotation;
 
 
-		/*(loop for i from 1 to 10 do
+       
+
+
+        /*(loop for i from 1 to 10 do
                 (insert (format "
             Vec2 block%dpos = makePositionVector(objlocs.getByName(\"b%d\"));
             GameObject block%d = academy.actorObjs[%d];
@@ -186,7 +187,7 @@ public class GridAgent : Agent
             \n\n"  i i i (- i 1) i i i i)))*/
 
 
-		Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
+        Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
         // set the agent cam to follow the agent to get the agent's point of view in the view port
         academy.agentCam.transform.position = academy.trueAgent.transform.position;
         // used to be set to the eye position
@@ -240,7 +241,16 @@ public class GridAgent : Agent
         WaitTimeInference();
     }
 
-    private void WaitTimeInference()
+    void Update()
+    {
+        update += Time.deltaTime;
+        if (update > 1.0f)
+        {
+            update = 0.0f;
+            Debug.Log("Update one sec");
+        }
+    }
+        private void WaitTimeInference()
     {
         if (renderCamera != null)
         {
