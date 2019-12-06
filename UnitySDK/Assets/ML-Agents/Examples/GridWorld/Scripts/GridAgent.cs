@@ -31,14 +31,14 @@ public class GridAgent : Agent
         //blocksworldSMS = new BlocksWorldSensoriMotorSystem(academy.gridSize);
 
 
-       
+
     }
 
     public override void CollectObservations()
     {
-     
+
     }
-   
+
     //BlocksWorldSensoriMotorSystem blocksworldSMS;
 
     // to be implemented by the developer
@@ -82,7 +82,7 @@ public class GridAgent : Agent
 	}
     }
 
-    // convert {"name": "b2", "x": 5, "y": 5} to  a Vec2(5,5); 
+    // convert {"name": "b2", "x": 5, "y": 5} to  a Vec2(5,5);
     public Vec2 makePositionVector(ObjInfo obj)
     {
         Vec2 v = new Vec2();
@@ -93,10 +93,10 @@ public class GridAgent : Agent
 
     [System.Serializable]
     public class ObjLocs
-    { 
+    {
 
         public ObjInfo[] objs;
-       
+
         public static ObjLocs CreateFromJSON(string jsonString)
         {
             return JsonUtility.FromJson<ObjLocs>(jsonString);
@@ -124,7 +124,7 @@ public class GridAgent : Agent
 
      [{"name": "h", "x": 4, "y": 3, "color": "rgb(0,0,255)", "shape": null, "texture": "02", "rotation": 0, "grasping": true, "graspedObject": null}, {"name": "j", "x": -100, "y": -100, "color": "rgb(255,165,0)", "shape": null, "texture": "03", "rotation": 0, "grasping": false, "graspedObject": null}, {"name": "v", "x": 0, "y": 4, "color": "rgb(255,255,255)", "shape": "circle", "texture": "00"}, {"name": "b1", "x": 1, "y": 5, "color": "rgb(255,20,147)", "shape": "circle", "texture": "00"},
      {"name": "b2", "x": 5, "y": 5, "color": "rgb(255,255,0)", "shape": "square", "texture": "01"}]
-      
+
      */
 
 
@@ -135,7 +135,7 @@ public class GridAgent : Agent
         {
             return;
         }
-        
+
         ObjLocs objlocs = ObjLocs.CreateFromJSON(textAction);
 
         Vec2 handpos = makePositionVector(objlocs.getByName("h"));
@@ -143,9 +143,36 @@ public class GridAgent : Agent
 
 
         // Move the robot agent itself
-        float dx = 0.0f;
-        float dy = 0.0f;
-        transform.position = new Vector3(handpos.x + dx, 0, handpos.y + dy);
+        Vector3 currentPos = transform.position;
+        float dx = handpos.x - currentPos.x ;
+        float dy = handpos.y - currentPos.y ;
+        Debug.Log("Dx=" + dx.ToString());
+        Debug.Log("Dy=" + dy.ToString());
+        Debug.Log(currentPos);
+        Debug.Log(handpos);
+        int _localRot = 0;
+        if (dx>0) {
+            _localRot = 90;
+        }
+        if (dx <0 )
+        {
+            _localRot = -90;
+        }
+        if (dy > 0)
+        {
+            _localRot = 180;
+        }
+        if (dy < 0)
+        {
+            _localRot = 0;
+        }
+        //do animation of local rotation.
+        Quaternion newRotation = Quaternion.Euler(0, _localRot, 0);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * 5);
+        transform.rotation = newRotation;
+
+        // NOTE: In this gridworld, y is z, and z is y.
+        transform.position = new Vector3(handpos.x, 0, handpos.y);
 
         /*(loop for i from 1 to 10 do
                 (insert (format "
@@ -189,8 +216,8 @@ public class GridAgent : Agent
             //block.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
         }
 
-   
-        
+
+
 	} catch (Exception e) {
             Console.WriteLine($"copyBlocksPositionsToUnity caught block pos error: '{e}'");
 	}
