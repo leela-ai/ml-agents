@@ -28,6 +28,53 @@ Then, manually install an local version of Unity "mlagents" python package.
 % cd ml-agents
 % pip3 install -e ./
 
+### Toubleshooting 
+
+If you see an error like:
+
+$ pip3 install -e ./
+Obtaining file:///Users/maxcarlsonold/leela/ml-agents/ml-agents
+    ERROR: Command errored out with exit status 1:
+     command: /usr/local/opt/python/bin/python3.6 -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/Users/maxcarlsonold/leela/ml-agents/ml-agents/setup.py'"'"'; __file__='"'"'/Users/maxcarlsonold/leela/ml-agents/ml-agents/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' egg_info
+         cwd: /Users/maxcarlsonold/leela/ml-agents/ml-agents/
+    Complete output (5 lines):
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/Users/maxcarlsonold/leela/ml-agents/ml-agents/setup.py", line 1, in <module>
+        from setuptools import setup, find_namespace_packages
+    ImportError: cannot import name 'find_namespace_packages'
+    ----------------------------------------
+ERROR: Command errored out with exit status 1: python setup.py egg_info Check the logs for full command output.
+
+
+$ pip3 uninstall setuptools
+Uninstalling setuptools-39.2.0:
+  Would remove:
+    /usr/local/lib/python3.6/site-packages/easy_install.py
+    /usr/local/lib/python3.6/site-packages/pkg_resources
+    /usr/local/lib/python3.6/site-packages/setuptools
+    /usr/local/lib/python3.6/site-packages/setuptools-39.2.0-py3.6.egg-info
+Proceed (y/n)? y
+  Successfully uninstalled setuptools-39.2.0
+wafer:ml-agents maxcarlsonold$ pip3 install -e ./
+Obtaining file:///Users/maxcarlsonold/leela/ml-agents/ml-agents
+    ERROR: Command errored out with exit status 1:
+     command: /usr/local/opt/python/bin/python3.6 -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/Users/maxcarlsonold/leela/ml-agents/ml-agents/setup.py'"'"'; __file__='"'"'/Users/maxcarlsonold/leela/ml-agents/ml-agents/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' egg_info
+         cwd: /Users/maxcarlsonold/leela/ml-agents/ml-agents/
+    Complete output (3 lines):
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+    ModuleNotFoundError: No module named 'setuptools'
+    ----------------------------------------
+ERROR: Command errored out with exit status 1: python setup.py egg_info Check the logs for full command output.
+wafer:ml-agents maxcarlsonold$ pip3 install setuptools
+Collecting setuptools
+  Using cached https://files.pythonhosted.org/packages/54/28/c45d8b54c1339f9644b87663945e54a8503cfef59cf0f65b3ff5dd17cf64/setuptools-42.0.2-py2.py3-none-any.whl
+Installing collected packages: setuptools
+Successfully installed setuptools-42.0.2
+wafer:ml-agents maxcarlsonold$ pip3 install -e ./
+  ...
+
 See [docs/Installation.md](docs/Installation.md) 
 
 ## Building a standalone GridWorld app in Unity
