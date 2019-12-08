@@ -220,7 +220,7 @@ public class GridAgent : Agent
                 marker.transform.position = new Vector3(obj.x, 1f, obj.y);
                 float SYNITEM_SCALE = 3.0f;
                 marker.transform.localScale += new Vector3(SYNITEM_SCALE, SYNITEM_SCALE, SYNITEM_SCALE);
-                synitemMarkers.Add(marker);
+//                synitemMarkers.Add(marker);
                 Destroy(marker, 30f);
             }
         }
