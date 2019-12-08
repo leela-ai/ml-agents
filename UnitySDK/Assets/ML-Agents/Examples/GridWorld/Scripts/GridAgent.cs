@@ -195,13 +195,20 @@ public class GridAgent : Agent
         // Console.WriteLine($"eyepos set to  '{eyepos.x} {eyepos.y}'");
 
         Vec2 targetpos = makePositionVector(objlocs.getByName("toplevel_goal"));
-        if (
-
-                academy.targetObj != null)
+        if (academy.targetObj != null)
         {
             academy.targetObj.transform.position = new Vector3(targetpos.x, 1f, targetpos.y);
             //academy.targetObj.transform.position = new Vector3(5f, 1f, 5f);
         }
+
+
+        Vec2 synitempos = makePositionVector(objlocs.getByName("synthetic_item"));
+        if (academy.syntheticItemObj != null)
+        {
+            academy.syntheticItemObj.transform.position = new Vector3(synitempos.x, 1f, synitempos.y);
+            //academy.targetObj.transform.position = new Vector3(5f, 1f, 5f);
+        }
+
 
 
         try
