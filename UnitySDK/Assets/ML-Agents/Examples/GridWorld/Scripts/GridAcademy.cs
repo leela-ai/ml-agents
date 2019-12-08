@@ -27,7 +27,6 @@ public class GridAcademy : Academy
     public GameObject targetObj;
 
     public GameObject syntheticItemPref;
-    public GameObject syntheticItemObj;
 
 
     GameObject[] objects;
@@ -55,10 +54,7 @@ public class GridAcademy : Academy
         targetObj.transform.position = new Vector3(5f, 0.2f, 5f);
         targetObj.transform.localScale += new Vector3(8f,8f,8f);
 
-        //target = GameObject.Find("Target");
-        syntheticItemObj = Instantiate(syntheticItemPref);
-        syntheticItemObj.transform.position = new Vector3(5f, 0.2f, 5f);
-        syntheticItemObj.transform.localScale += new Vector3(8f, 8f, 8f);
+ 
 
 
         plane = GameObject.Find("Plane");

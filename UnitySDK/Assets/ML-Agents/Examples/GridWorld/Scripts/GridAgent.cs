@@ -127,7 +127,8 @@ public class GridAgent : Agent
 
      */
 
-
+        /* holds markers that show where synthetic items are */
+    List<GameObject> synitemMarkers = new List<GameObject>();
 
     public void copyBlocksPositionsToUnity(string textAction)
     {
@@ -149,20 +150,21 @@ public class GridAgent : Agent
         //Debug.Log("Y: New, Curr: " + handpos.y.ToString() + "," + currentPos.y);
         Debug.Log(dx.ToString() + ":" + dy.ToString());
         int _localRot = 0;
-        if (dx > 0 & dy == 0.0) {
+        double EPSILON = 0.01;
+        if (dx > 0 & Math.Abs(dy) < EPSILON) {
             _localRot = 90;
         }
-        if (dx < 0 & dy == 0.0)
+        if (dx < 0 & Math.Abs(dy) < EPSILON)
         {
             _localRot = -90;
             //Debug.Log("Turn Left");
         }
-        if (dy > 0 & dx == 0.0)
+        if (dy > 0 & Math.Abs(dx) < EPSILON)
         {
             _localRot = 0;
            // Debug.Log("Turn Top");
         }
-        if (dy < 0 & dx == 0.0)
+        if (dy < 0 & Math.Abs(dx) < EPSILON)
         {
             _localRot = 180;
             //Debug.Log("Turn Bottom");
@@ -202,12 +204,28 @@ public class GridAgent : Agent
         }
 
 
-        Vec2 synitempos = makePositionVector(objlocs.getByName("synthetic_item"));
-        if (academy.syntheticItemObj != null)
+        GameObject syntheticItemObj;
+        //target = GameObject.Find("Target");
+        /*
+         *syntheticItemObj = Instantiate(academy.syntheticItemPref);
+         syntheticItemObj.transform.position = new Vector3(5f, 0.2f, 5f);
+         syntheticItemObj.transform.localScale += new Vector3(8f, 8f, 8f);
+         */
+        /* loop over objlocs, find all ones named 'synthetic_item' and instantiate a marker at their x,y loc */
+        foreach (ObjInfo obj in objlocs.objs)
         {
-            academy.syntheticItemObj.transform.position = new Vector3(synitempos.x, 1f, synitempos.y);
-            //academy.targetObj.transform.position = new Vector3(5f, 1f, 5f);
+            if (obj.name == "synthetic_item")
+            {
+                GameObject marker = Instantiate(academy.syntheticItemPref);
+                marker.transform.position = new Vector3(obj.x, 1f, obj.y);
+                float SYNITEM_SCALE = 3.0f;
+                marker.transform.localScale += new Vector3(SYNITEM_SCALE, SYNITEM_SCALE, SYNITEM_SCALE);
+                synitemMarkers.Add(marker);
+                Destroy(marker, 30f);
+            }
         }
+
+        // Destroy(gameObject, .5f); // (time delay destroy)
 
 
 
