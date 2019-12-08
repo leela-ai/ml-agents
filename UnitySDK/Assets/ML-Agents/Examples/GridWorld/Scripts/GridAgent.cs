@@ -9,6 +9,9 @@ using System.Text;
 
 public class GridAgent : Agent
 {
+    private float update;
+
+
     [Header("Specific to GridWorld")]
     private GridAcademy academy;
     public float timeBetweenDecisionsAtInference;
@@ -31,20 +34,20 @@ public class GridAgent : Agent
         //blocksworldSMS = new BlocksWorldSensoriMotorSystem(academy.gridSize);
 
 
-       
+
     }
 
     public override void CollectObservations()
     {
-     
+
     }
-   
+
     //BlocksWorldSensoriMotorSystem blocksworldSMS;
 
     // to be implemented by the developer
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        AddReward(-0.01f);
+        //AddReward(-0.01f);
 
         //Debug.Log("vectorAction[len " + vectorAction.Length+"][0]: "+ vectorAction[0]);
         Vector3 targetPos = transform.position;
@@ -62,9 +65,6 @@ public class GridAgent : Agent
 
         // -->>> grab block and hand locs and set tranforms <<<--
         copyBlocksPositionsToUnity(textAction);
-
-
-
     }
 
     [System.Serializable]
@@ -82,7 +82,7 @@ public class GridAgent : Agent
 	}
     }
 
-    // convert {"name": "b2", "x": 5, "y": 5} to  a Vec2(5,5); 
+    // convert {"name": "b2", "x": 5, "y": 5} to  a Vec2(5,5);
     public Vec2 makePositionVector(ObjInfo obj)
     {
         Vec2 v = new Vec2();
@@ -93,10 +93,10 @@ public class GridAgent : Agent
 
     [System.Serializable]
     public class ObjLocs
-    { 
+    {
 
         public ObjInfo[] objs;
-       
+
         public static ObjLocs CreateFromJSON(string jsonString)
         {
             return JsonUtility.FromJson<ObjLocs>(jsonString);
@@ -124,7 +124,7 @@ public class GridAgent : Agent
 
      [{"name": "h", "x": 4, "y": 3, "color": "rgb(0,0,255)", "shape": null, "texture": "02", "rotation": 0, "grasping": true, "graspedObject": null}, {"name": "j", "x": -100, "y": -100, "color": "rgb(255,165,0)", "shape": null, "texture": "03", "rotation": 0, "grasping": false, "graspedObject": null}, {"name": "v", "x": 0, "y": 4, "color": "rgb(255,255,255)", "shape": "circle", "texture": "00"}, {"name": "b1", "x": 1, "y": 5, "color": "rgb(255,20,147)", "shape": "circle", "texture": "00"},
      {"name": "b2", "x": 5, "y": 5, "color": "rgb(255,255,0)", "shape": "square", "texture": "01"}]
-      
+
      */
 
 
@@ -135,18 +135,48 @@ public class GridAgent : Agent
         {
             return;
         }
-        
+
         ObjLocs objlocs = ObjLocs.CreateFromJSON(textAction);
 
         Vec2 handpos = makePositionVector(objlocs.getByName("h"));
-        Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
-
-
 
         // Move the robot agent itself
-        float dx = 0.0f;
-        float dy = 0.0f;
-        transform.position = new Vector3(handpos.x + dx, 0, handpos.y + dy);
+        Vector3 currentPos = transform.position;
+        float dx = handpos.x - currentPos.x ;
+        // Remeber! Y is Z, Z is Y......god damn it.
+        float dy = handpos.y - currentPos.z ;
+        //Debug.Log("X: New, Curr: " + handpos.x.ToString() + "," + currentPos.x);
+        //Debug.Log("Y: New, Curr: " + handpos.y.ToString() + "," + currentPos.y);
+        Debug.Log(dx.ToString() + ":" + dy.ToString());
+        int _localRot = 0;
+        if (dx > 0 & dy == 0.0) {
+            _localRot = 90;
+        }
+        if (dx < 0 & dy == 0.0)
+        {
+            _localRot = -90;
+            //Debug.Log("Turn Left");
+        }
+        if (dy > 0 & dx == 0.0)
+        {
+            _localRot = 0;
+           // Debug.Log("Turn Top");
+        }
+        if (dy < 0 & dx == 0.0)
+        {
+            _localRot = 180;
+            //Debug.Log("Turn Bottom");
+        }
+        //do local rotation. Still need to animate.		
+        transform.rotation = Quaternion.Euler(0, _localRot, 0);
+        Debug.Log("Rot = " + _localRot.ToString());
+
+        // NOTE: In this gridworld, y is z, and z is y.
+        transform.position = new Vector3(handpos.x, 0, handpos.y);
+
+
+       
+
 
         /*(loop for i from 1 to 10 do
                 (insert (format "
@@ -155,76 +185,50 @@ public class GridAgent : Agent
             block%d.transform.position = new Vector3(block%dpos.x + dx, 0, block%dpos.y + dy);
             block%d.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
             \n\n"  i i i (- i 1) i i i i)))*/
-        try {
-
-	    Vec2 block1pos = makePositionVector(objlocs.getByName("b1"));
-	    GameObject block1 = academy.actorObjs[0];
-	    block1.transform.position = new Vector3(block1pos.x + dx, 0, block1pos.y + dy);
-	    block1.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
 
 
-	    Vec2 block2pos = makePositionVector(objlocs.getByName("b2"));
-	    GameObject block2 = academy.actorObjs[1];
-	    block2.transform.position = new Vector3(block2pos.x + dx, 0, block2pos.y + dy);
-	    block2.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
+        Vec2 eyepos = makePositionVector(objlocs.getByName("v"));
+        // set the agent cam to follow the agent to get the agent's point of view in the view port
+        academy.agentCam.transform.position = academy.trueAgent.transform.position;
+        // used to be set to the eye position
+        //new Vector3(eyepos.x, 6f, eyepos.y);
+        // Console.WriteLine($"eyepos set to  '{eyepos.x} {eyepos.y}'");
+
+        Vec2 targetpos = makePositionVector(objlocs.getByName("toplevel_goal"));
+        if (academy.targetObj != null)
+        {
+            academy.targetObj.transform.position = new Vector3(targetpos.x, 1f, targetpos.y);
+            //academy.targetObj.transform.position = new Vector3(5f, 1f, 5f);
+        }
 
 
-	    Vec2 block3pos = makePositionVector(objlocs.getByName("b3"));
-	    GameObject block3 = academy.actorObjs[2];
-	    block3.transform.position = new Vector3(block3pos.x + dx, 0, block3pos.y + dy);
-	    block3.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
+        Vec2 synitempos = makePositionVector(objlocs.getByName("synthetic_item"));
+        if (academy.syntheticItemObj != null)
+        {
+            academy.syntheticItemObj.transform.position = new Vector3(synitempos.x, 1f, synitempos.y);
+            //academy.targetObj.transform.position = new Vector3(5f, 1f, 5f);
+        }
 
 
-	    Vec2 block4pos = makePositionVector(objlocs.getByName("b4"));
-	    GameObject block4 = academy.actorObjs[3];
-	    block4.transform.position = new Vector3(block4pos.x + dx, 0, block4pos.y + dy);
-	    block4.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
+
+        try
+        {
 
 
-	    Vec2 block5pos = makePositionVector(objlocs.getByName("b5"));
-	    GameObject block5 = academy.actorObjs[4];
-	    block5.transform.position = new Vector3(block5pos.x + dx, 0, block5pos.y + dy);
-	    block5.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
+        List<String> blocknames = new List<String>() {
+            "b1", "b2", "b3", "b4", "b5", "b6", "b7" ,"b8", "b9", "b10"
+        };
+
+        for (int i = 0; i < blocknames.Count; i++) {
+            string blockname = blocknames[i];
+            Vec2 blockpos = makePositionVector(objlocs.getByName(blockname));
+            GameObject block = academy.actorObjs[i];
+            block.transform.position = new Vector3(blockpos.x, 0.25f, blockpos.y);
+            //block.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        }
 
 
-	    Vec2 block6pos = makePositionVector(objlocs.getByName("b6"));
-	    GameObject block6 = academy.actorObjs[5];
-	    block6.transform.position = new Vector3(block6pos.x + dx, 0, block6pos.y + dy);
-	    block6.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
 
-
-	    Vec2 block7pos = makePositionVector(objlocs.getByName("b7"));
-	    GameObject block7 = academy.actorObjs[6];
-	    block7.transform.position = new Vector3(block7pos.x + dx, 0, block7pos.y + dy);
-	    block7.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
-
-
-	    Vec2 block8pos = makePositionVector(objlocs.getByName("b8"));
-	    GameObject block8 = academy.actorObjs[7];
-	    block8.transform.position = new Vector3(block8pos.x + dx, 0, block8pos.y + dy);
-	    block8.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
-
-
-	    Vec2 block9pos = makePositionVector(objlocs.getByName("b9"));
-	    GameObject block9 = academy.actorObjs[8];
-	    block9.transform.position = new Vector3(block9pos.x + dx, 0, block9pos.y + dy);
-	    block9.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
-
-
-	    Vec2 block10pos = makePositionVector(objlocs.getByName("b10"));
-	    GameObject block10 = academy.actorObjs[9];
-	    block10.transform.position = new Vector3(block10pos.x + dx, 0, block10pos.y + dy);
-	    block10.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        
 	} catch (Exception e) {
             Console.WriteLine($"copyBlocksPositionsToUnity caught block pos error: '{e}'");
 	}
@@ -244,7 +248,16 @@ public class GridAgent : Agent
         WaitTimeInference();
     }
 
-    private void WaitTimeInference()
+    void Update()
+    {
+        update += Time.deltaTime;
+        if (update > 1.0f)
+        {
+            update = 0.0f;
+            Debug.Log("Update one sec");
+        }
+    }
+        private void WaitTimeInference()
     {
         if (renderCamera != null)
         {

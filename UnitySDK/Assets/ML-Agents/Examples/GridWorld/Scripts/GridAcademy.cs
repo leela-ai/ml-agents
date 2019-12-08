@@ -13,15 +13,22 @@ public class GridAcademy : Academy
 
     public GameObject trueAgent;
 
+
     public int gridSize;
 
     public GameObject camObject;
     Camera cam;
-    Camera agentCam;
+    public Camera agentCam;
 
     public GameObject agentPref;
     public GameObject block1;
     public GameObject block2;
+    public GameObject targetPref;
+    public GameObject targetObj;
+
+    public GameObject syntheticItemPref;
+    public GameObject syntheticItemObj;
+
 
     GameObject[] objects;
 
@@ -43,19 +50,39 @@ public class GridAcademy : Academy
 
         actorObjs = new List<GameObject>();
 
+        //target = GameObject.Find("Target");
+        targetObj = Instantiate(targetPref);
+        targetObj.transform.position = new Vector3(5f, 0.2f, 5f);
+        targetObj.transform.localScale += new Vector3(8f,8f,8f);
+
+        //target = GameObject.Find("Target");
+        syntheticItemObj = Instantiate(syntheticItemPref);
+        syntheticItemObj.transform.position = new Vector3(5f, 0.2f, 5f);
+        syntheticItemObj.transform.localScale += new Vector3(8f, 8f, 8f);
+
+
         plane = GameObject.Find("Plane");
+        /*
         sN = GameObject.Find("sN");
         sS = GameObject.Find("sS");
         sW = GameObject.Find("sW");
         sE = GameObject.Find("sE");
+        */
     }
 
     public void SetEnvironment()
     {
-        cam.transform.position = new Vector3(-((int)resetParameters["gridSize"] - 1) / 2f,
-                                             (int)resetParameters["gridSize"] * 1.25f,
-                                             -((int)resetParameters["gridSize"] - 1) / 2f);
-        cam.orthographicSize = ((int)resetParameters["gridSize"] + 5f) / 2f;
+        /*    cam.transform.position = new Vector3(-((int)resetParameters["gridSize"] - 1) / 2f,
+                                                 (int)resetParameters["gridSize"] * 1.25f,
+                                                 -((int)resetParameters["gridSize"] - 1) / 2f);
+                                                 */
+        // This is the main camera. Set it about mid-way in the house
+        //float thisPos = ((((int)resetParameters["gridSize"] - 1) / 2f) + 2f);
+        //cam.transform.position = new Vector3(thisPos, thisPos, thisPos);
+        // set camera rotation so it's looking into the house from the back
+        //cam.transform.rotation = Quaternion.Euler(45, 180, 0);
+
+        //cam.orthographicSize = ((int)resetParameters["gridSize"] + 5f) / 2f;
 
         List<int> playersList = new List<int>();
 
@@ -74,6 +101,7 @@ public class GridAcademy : Academy
 
         plane.transform.localScale = new Vector3((gridSize+2) / 10.0f, 1f, (gridSize+2) / 10.0f);
         plane.transform.position = new Vector3((gridSize +2) / 2f, -0.5f, (gridSize+2) / 2f);
+        /*
         sN.transform.localScale = new Vector3(1, 1, gridSize + 3);
         sS.transform.localScale = new Vector3(1, 1, gridSize + 3);
         sN.transform.position = new Vector3((gridSize ) / 2f, 0.0f, gridSize+2);
@@ -82,8 +110,8 @@ public class GridAcademy : Academy
         sW.transform.localScale = new Vector3(1, 1, gridSize + 3);
         sE.transform.position = new Vector3(gridSize+2, 0.0f, (gridSize ) / 2f);
         sW.transform.position = new Vector3(-1, 0.0f, (gridSize ) / 2f);
-
-        agentCam.orthographicSize = (gridSize) / 2f;
+        */
+        agentCam.orthographicSize = 2f;
         agentCam.transform.position = new Vector3((gridSize - 1) / 2f, gridSize + 1f, (gridSize - 1) / 2f);
 
     }
@@ -112,14 +140,14 @@ public class GridAcademy : Academy
             int x = (numbersA[i]) / gridSize;
             int y = (numbersA[i]) % gridSize;
             GameObject actorObj = Instantiate(objects[players[i]]);
-            actorObj.transform.position = new Vector3(x, -0.25f, y);
+            actorObj.transform.position = new Vector3(x, 0f, y);
             actorObjs.Add(actorObj);
         }
 
 
         int x_a = (numbersA[players.Length]) / gridSize;
         int y_a = (numbersA[players.Length]) % gridSize;
-        trueAgent.transform.position = new Vector3(x_a, -0.25f, y_a);
+        trueAgent.transform.position = new Vector3(x_a, 0f, y_a);
     }
 
     public override void AcademyStep()

@@ -1,0 +1,36 @@
+# ProBuilder 4.0.5
+# https://unity3d.com/unity/features/worldbuilding/probuilder
+# 01.06.2019 15:01:49
+
+mtllib ./Column.mtl
+o Column
+
+g Cube
+v 0 0 0.125
+v -0.125 0 0.125
+v 0 3 0.125
+v -0.125 3 0.125
+v -0.125 0 0
+v -0.125 3 0
+v 0 0 0
+v 0 3 0
+
+vt 0 0
+vt -0.125 0
+vt 0 3
+vt -0.125 3
+vt 0.125 0
+vt 0.125 3
+
+vn 0 0 1
+vn -1 0 0
+vn 0 0 -1
+vn 1 0 0
+
+g Cube
+usemtl ProBuilderDefault
+f 3/3/1 4/4/1 2/2/1 1/1/1
+f 4/3/2 6/4/2 5/2/2 2/1/2
+f 6/6/3 8/3/3 7/1/3 5/5/3
+f 8/6/4 3/3/4 1/1/4 7/5/4
+

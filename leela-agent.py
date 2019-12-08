@@ -30,6 +30,8 @@ from math import ceil
 import ssl
 import sys
 
+#For python 3.7.4
+#from mlagents.envs.environment import UnityEnvironment
 from mlagents.envs import UnityEnvironment
 import argparse
 
@@ -112,7 +114,8 @@ def join(session, details):
     global this_session
     print("joined {}".format(details))
     this_session = session
-    session.subscribe(on_event, u'ai.leela.sms.render.json')
+    #    session.subscribe(on_event, u'ai.leela.sms.render.json')
+    session.subscribe(on_event, u'ai.leela.brain.dashboard.json')
 
 def on_event(msg, details=None, wtf=None):
     if debug:
@@ -124,8 +127,10 @@ def on_event(msg, details=None, wtf=None):
 # [{'name': 'h', 'x': 2, 'y': 3, 'color': 'rgb(0,0,255)', 'shape': None, 'texture': '02', 'rotation': 0, 'grasping': True, 'graspedObject': None}, {'name': 'j', 'x': -100, 'y': -100, 'color': 'rgb(255,165,0)', 'shape': None, 'texture': '03', 'rotation': 0, 'grasping': False, 'graspedObject': None}, {'name': 'v', 'x': 1, 'y': 4, 'color': 'rgb(255,255,255)', 'shape': 'circle', 'texture': '00'}, {'name': 'b1', 'x': 1, 'y': 5, 'color': 'rgb(255,20,147)', 'shape': 'circle', 'texture': '00'}, {'name': 'b2', 'x': 5, 'y': 5, 'color': 'rgb(255,255,0)', 'shape': 'square', 'texture': '01'}]
 
 def step_world(info):
-    objlocs = info['debuginfo']
+    #objlocs = info['debuginfo']    # Would be used if subscribed to topic ai.leela.sms.render.json
+    objlocs = info['legacy_status']['objlocs']  # Used when subscribing to dashboard status json 
     locs = {'objs': objlocs} # make a dict with just one key 'objs' that maps to a list of obj descriptior dicts, 'objs' => [ {'name': 'b1', 'x': 1, 'y': 5}, ... ]
+    #print (locs)
     #print('step_world action=', action)
     objlocs_string = json.dumps(locs) # convert back to serialized json string to pass into Unity as the 'action' string
     environment_state = environment.step(text_action=objlocs_string)['GridWorldLearning']

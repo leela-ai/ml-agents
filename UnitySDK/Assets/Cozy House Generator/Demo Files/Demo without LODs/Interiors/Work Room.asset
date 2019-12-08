@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7597764064304761917dd93afb775b18, type: 3}
+  m_Name: Work Room
+  m_EditorClassIdentifier: 
+  windowsRate: 2
+  floor: {fileID: 2100000, guid: e39312d134cfc21458a267ef61c92348, type: 2}
+  walls: {fileID: 2100000, guid: 814ac320378e26f4a8131a42af5ed7df, type: 2}
+  ceiling: {fileID: 2100000, guid: 41634e024576b21408b0dbd3ba46e0db, type: 2}
+  column: {fileID: 2100000, guid: 814ac320378e26f4a8131a42af5ed7df, type: 2}
+  possibleProps:
+  - props: {fileID: 11400000, guid: 271293d539d2aa34594849d0a32e1b93, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: bf4301147262e2946b665e5be45e0b50, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: 1783472fec15245438d3ecfb65b7b97b, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: 99bf7449772b56946827469389022fa4, type: 2}
+    count: 1
+  maxRoomSize: 20
+  minRoomSize: 2
+  maxCountOfDoors: 6
+  placeOnlyOnce: 1

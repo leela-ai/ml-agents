@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7597764064304761917dd93afb775b18, type: 3}
+  m_Name: Kitchen
+  m_EditorClassIdentifier: 
+  windowsRate: 4
+  floor: {fileID: 2100000, guid: 7d740687116f34b4c9b4e87f8bad07b2, type: 2}
+  walls: {fileID: 2100000, guid: accd084a340e5844b8de93e4bdfd7196, type: 2}
+  ceiling: {fileID: 2100000, guid: 41634e024576b21408b0dbd3ba46e0db, type: 2}
+  column: {fileID: 2100000, guid: accd084a340e5844b8de93e4bdfd7196, type: 2}
+  possibleProps:
+  - props: {fileID: 11400000, guid: 230a41aea606a994eb29af055878efba, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: 2edd3688c101634429aaa4f7899a1cd4, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: 67d10f552fcce7b4f964aa2c898fe9dd, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: 260417b0baf9e6d40a6d97cc3694940c, type: 2}
+    count: 1
+  - props: {fileID: 11400000, guid: a3a3b88254b791d4d89e8f59091767a8, type: 2}
+    count: 3
+  maxRoomSize: 30
+  minRoomSize: 8
+  maxCountOfDoors: 4
+  placeOnlyOnce: 1

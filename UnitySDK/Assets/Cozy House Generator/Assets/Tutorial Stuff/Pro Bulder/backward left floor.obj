@@ -1,0 +1,24 @@
+# ProBuilder 4.0.5
+# https://unity3d.com/unity/features/worldbuilding/probuilder
+# 04.06.2019 18:00:30
+
+mtllib ./backward_left_floor.mtl
+o backward left floor
+
+g Cube
+v 0 0.125 3
+v -3 0.125 3
+v 0 0.125 0
+v -3 0.125 0
+
+vt 0 3
+vt 3 3
+vt 0 0
+vt 3 0
+
+vn 0 1 0
+
+g Cube
+usemtl ProBuilderDefault
+f 3/3/1 4/4/1 2/2/1 1/1/1
+

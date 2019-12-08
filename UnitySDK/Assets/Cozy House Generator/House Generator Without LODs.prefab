@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9100735232314256131
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9100735232314256157}
+  - component: {fileID: 9100735232314256158}
+  m_Layer: 0
+  m_Name: Panel House With Custom Roof
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &9100735232314256157
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9100735232314256131}
+  m_LocalRotation: {x: -0, y: -0.70710725, z: -0, w: -0.7071064}
+  m_LocalPosition: {x: 26, y: -7.7771265e-18, z: -8}
+  m_LocalScale: {x: 1.0000005, y: 1, z: 1.0000005}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -270, z: 0}
+--- !u!114 &9100735232314256158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9100735232314256131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda8ada33d901954ba389cd6c0c88940, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 14503
+  builderType: 1
+  cellPrefab: {fileID: 1737237329271098, guid: e7d94f929c830514f969cf00b26ffc9c, type: 3}
+  internalDoorPrefab: {fileID: 9051138882549066669, guid: 38d4f34c523121d4a871476b2f628b97,
+    type: 3}
+  externalDoorPrefab: {fileID: 3329500287406934837, guid: 111ea6ad3a2f783458763ab43d7ff01f,
+    type: 3}
+  windowFramePrefab: {fileID: 3551015963297475060, guid: 0cdc06fee652154409fe5e6bbaa677e7,
+    type: 3}
+  lodCullingPercent: 5
+  size: 8
+  floorsCount: 6
+  hideCeiling: 0
+  facadeMaterial: {fileID: 2100000, guid: dece58cfb3a706f47a6e62b33f3663c5, type: 2}
+  facadeColumnMaterial: {fileID: 2100000, guid: 0d7f32004a56cc34a9ebfac20040f643,
+    type: 2}
+  decoratorSample1: {fileID: 2100000, guid: 0d7f32004a56cc34a9ebfac20040f643, type: 2}
+  decoratorSample2: {fileID: 0}
+  decoratorSample3: {fileID: 0}
+  interiors:
+  - {fileID: 11400000, guid: c889be09983d4664c93ff16e935e935a, type: 2}
+  - {fileID: 11400000, guid: d4c3686cf94e3cf489bb2cdb1159a1b0, type: 2}
+  - {fileID: 11400000, guid: 116d1a2a6bbf50c48a89c19419658389, type: 2}
+  - {fileID: 11400000, guid: f92b2238481140f409b672e651ac18e0, type: 2}
+  - {fileID: 11400000, guid: a8263d7a58b33674b81c93e93cdffa28, type: 2}
+  - {fileID: 11400000, guid: d75355881552efb46a2a2d52ea21fd45, type: 2}
+  - {fileID: 11400000, guid: 49b67d6a9fa8a6344b9be22a7b21f162, type: 2}
+  pipelinePreset: {fileID: 11400000, guid: f8940b25b25884c47b676ce5cb6192e1, type: 2}

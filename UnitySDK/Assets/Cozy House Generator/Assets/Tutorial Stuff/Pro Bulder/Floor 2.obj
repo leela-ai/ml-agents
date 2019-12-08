@@ -1,0 +1,24 @@
+# ProBuilder 4.0.5
+# https://unity3d.com/unity/features/worldbuilding/probuilder
+# 04.06.2019 17:39:28
+
+mtllib ./Floor_2.mtl
+o Floor 2
+
+g Cube (1)
+v 3 0.125 1.74083E-13
+v 2.999991 0.125 3
+v -5.960464E-08 0.125 -8.761883E-06
+v -8.821487E-06 0.125 2.999991
+
+vt -3 5.960464E-08
+vt 0 5.960464E-08
+vt -3 -3
+vt 0 -3
+
+vn 0 1 0
+
+g Cube (1)
+usemtl ProBuilderDefault
+f 3/3/1 4/4/1 2/2/1 1/1/1
+
