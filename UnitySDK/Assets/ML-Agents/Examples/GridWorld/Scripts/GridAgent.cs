@@ -218,7 +218,7 @@ public class GridAgent : Agent
             {
                 GameObject marker = Instantiate(academy.syntheticItemPref);
                 marker.transform.position = new Vector3(obj.x, 1f, obj.y);
-                float SYNITEM_SCALE = 3.0f;
+                float SYNITEM_SCALE = 10.0f;
                 marker.transform.localScale += new Vector3(SYNITEM_SCALE, SYNITEM_SCALE, SYNITEM_SCALE);
 //                synitemMarkers.Add(marker);
                 Destroy(marker, 30f);
