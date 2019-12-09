@@ -148,7 +148,7 @@ public class GridAgent : Agent
         float dy = handpos.y - currentPos.z ;
         //Debug.Log("X: New, Curr: " + handpos.x.ToString() + "," + currentPos.x);
         //Debug.Log("Y: New, Curr: " + handpos.y.ToString() + "," + currentPos.y);
-        Debug.Log(dx.ToString() + ":" + dy.ToString());
+        //Debug.Log(dx.ToString() + ":" + dy.ToString());
         int _localRot = 0;
         double EPSILON = 0.01;
         if (dx > 0 & Math.Abs(dy) < EPSILON) {
@@ -171,7 +171,7 @@ public class GridAgent : Agent
         }
         //do local rotation. Still need to animate.		
         transform.rotation = Quaternion.Euler(0, _localRot, 0);
-        Debug.Log("Rot = " + _localRot.ToString());
+        //Debug.Log("Rot = " + _localRot.ToString());
 
         // NOTE: In this gridworld, y is z, and z is y.
         transform.position = new Vector3(handpos.x, 0, handpos.y);
@@ -266,15 +266,15 @@ public class GridAgent : Agent
         WaitTimeInference();
     }
 
-    void Update()
-    {
-        update += Time.deltaTime;
-        if (update > 1.0f)
-        {
-            update = 0.0f;
-            Debug.Log("Update one sec");
-        }
-    }
+    //void Update()
+    //{
+    //    update += Time.deltaTime;
+    //    if (update > 1.0f)
+    //    {
+    //        update = 0.0f;
+    //        Debug.Log("Update one sec");
+    //    }
+    //}
         private void WaitTimeInference()
     {
         if (renderCamera != null)
